@@ -1,4 +1,4 @@
 #Local venv
-venv/
+protrackenv/
 #Byte-compiled / optimized / DLL files
 __pycache__/
