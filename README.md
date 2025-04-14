@@ -22,3 +22,7 @@ This application motivates users by giving them clear visual feedback and enable
 | 24215747   | Trisha Santillan     | ToriCodie          |
 | 23802553   | Kai Fletcher  |         |
 | 23236855   | Ruben ho Ho	  |  Rbho10       |
+
+TODO: 
+Use sqlite alchemy package for database 
+try linking to different html page
