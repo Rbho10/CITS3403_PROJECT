@@ -1,9 +1,59 @@
 <DOCTYPE! html>
-    <html>
-    <header>
+<html lang="en">
+<head>
+    <title>Log In</title>
 
-    </header>
-    <body>
-        
-    </body>
-    </html>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="logInPage.css">
+
+    <script type="text/javascript" src="logInFunctions.js"></script>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <!--Contains button to go back to welcome page and button to create account page-->
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img source="" alt="studyProgramLogo" style="width:40px" class="rounded pill"> 
+                <span class="navbar-text">Study Program</span>
+            </a> <!--To welcome page button-->
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"> <!--To sign up page button-->
+                    <span class="glyphicon glyphicon-user"></span>
+                    <a class="nav-link" href="#">Sign Up</a>
+                </li>
+                <li class="nav-item"> <!--To log in page button || essentially just reloads page-->
+                    <span class="glyphicon glyphicon-log-in"></span>
+                    <a class="nav-link active" href="#">Log In</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid p-5 vh-100 vw-100">
+        <!--Contains username input, password input, remember me button and sign in button-->
+        <div class="d-flex shadow h-100 w-100 justify-content-center align-items-center logInBox">
+            <form name="logIn" action="">
+                <div class="mb-3 mt-3 row">
+                    <label class="form-label col-sm-3" for="usernameBox">Username</label>
+                    <input class="form-control col-sm-9" type="text" name="username" id="username" placeholder="Username" maxlength="30" required>
+                </div>
+                <div class="mb-3 mt-3 row">
+                    <label  class="form-label col-sm-3" for="passwordBox">Password</label>
+                    <input class="form-control col-sm-9" type="password" name="password" id="password" placeholder="Password" required>
+                </div>
+                <div class="form-check mb-3 mt-3 row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-9">
+                        <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" value="rememberMe" disabled>
+                        <label class="form-check-label">Remember me</label>
+                    </div>
+                </div>
+                <div class="mb-3 mt-3">
+                    <button class="btn btn-outline-dark p-2 buttons" type="submit" name="signInButton">signInButton</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
