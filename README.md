@@ -20,7 +20,7 @@ This application motivates users by giving them clear visual feedback and enable
 |------------|----------------|-------------------|
 | 23718161   | Tiselle Rayawang    | TiselleWang       |
 | 24215747   | Trisha Santillan     | ToriCodie          |
-| 23802553   | Kai Fletcher  |         |
+| 23808253   | Kai Fletcher  |         |
 | 23236855   | Ruben ho Ho	  |  Rbho10       |
 
 TODO: 
