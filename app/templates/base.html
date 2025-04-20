@@ -26,7 +26,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-3">
-                <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Dashboard Insights</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="goToDashboard()">Dashboard Insights</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Tips & Trick</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Learn</a></li>
             </ul>
@@ -48,6 +48,9 @@
 
         function goToSignup() {
             window.location.href = "signup.html";
+        }
+        function goToDashboard() {
+            window.location.href = "{{ url_for('dashboard') }}";
         }
     </script>
 </body>
