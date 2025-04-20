@@ -19,13 +19,13 @@ def dashboard():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        first_name = request.form['first_name']
-        last_name = request.form.get('last_name', '')  # optional
+        first_name = request.form['first_name'] #in request.form['x'] x = the name attribute in the <form> field
+        last_name = request.form.get('last_name', '')  
         email = request.form['email']
         username = request.form['username']
         password = request.form['password']
 
-        # Check for duplicates
+        # Check for duplicates as a quality of life feature
         if User.query.filter_by(username=username).first():
             return "Username already exists."
         if User.query.filter_by(email=email).first():
