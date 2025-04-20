@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up | ProTrack</title>
+</head>
+<body>
+    <h2>Create a New Account</h2>
+    <form action="{{ url_for('signup') }}" method="post">
+        <label for="first_name">First Name:</label><br>
+        <input type="text" id="first_name" name="first_name" required><br><br>
+
+        <label for="last_name">Last Name:</label><br>
+        <input type="text" id="last_name" name="last_name"><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <input type="submit" value="Sign Up">
+    </form>
+</body>
+</html>
+<!-- This is just a simple HTML form for the user signup. It includes fields for first name, last name, email, username, and password. The form submits to the 'signup' route in the Flask application. -->
+ <!-- I added this to test my db -->

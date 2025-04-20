@@ -1,6 +1,8 @@
 from flask import render_template
 from app import app
 from flask import request, redirect, url_for, jsonify
+from werkzeug.security import generate_password_hash
+from app.models import db, User
 
 @app.route('/')
 def welcome():
@@ -13,3 +15,40 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     return render_template("dashboard.html")
+
+@app.route('/signup', methods=["GET", "POST"])
+def signup():
+    if request.method == "POST":
+        first_name = request.form['first_name']
+        last_name = request.form.get('last_name', '')  # optional
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+
+        # Check for duplicates
+        if User.query.filter_by(username=username).first():
+            return "Username already exists."
+        if User.query.filter_by(email=email).first():
+            return "Email already registered."
+
+        # Hash and save
+        hashed_password = generate_password_hash(password)
+        new_user = User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            username=username,
+            password=hashed_password
+        )
+        db.session.add(new_user)
+        db.session.commit()
+
+        return redirect(url_for('login'))
+
+    return render_template("signup.html")
+
+@app.route('/users')
+def show_users():
+    users = User.query.all()
+    return "<br>".join([f"{u.id}: {u.username} - {u.email} - {u.first_name} - {u.created_at}" for u in users])
+
