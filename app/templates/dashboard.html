@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+
+</head>
+<body>
+
+  <!-- Friends Sidebar -->
+  <div class="sidebar">
+    <div class="profile-pic"></div>
+    <div class="friend-icon"></div>
+    <div class="friend-icon"></div>
+    <div class="friend-icon"></div>
+    <div class="friend-icon"></div>
+    <div class="friend-icon"></div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+
+    <!-- Top Nav -->
+    <div class="top-nav">
+      <div>Welcome back, Username! </div>
+      <div class="create-btn">+ Create Study Subject</div>
+    </div>
+
+    <!-- Dashboard Body -->
+    <div class="dashboard-body">
+
+      <!-- Subject Card -->
+      <div class="subject-card">
+        <div class="graph-box"></div>
+        <div class="subject-info">
+          <div class="subject-title">Biology - Genetics</div>
+          <div class="subject-insight">You're mastering Mendelian inheritance! 80% accuracy this week.</div>
+        </div>
+      </div>
+
+      <!-- Another Subject Card -->
+      <div class="subject-card">
+        <div class="graph-box"></div>
+        <div class="subject-info">
+          <div class="subject-title">Mathematics - Algebra</div>
+          <div class="subject-insight">Steady progress on equations. Practice recommended: linear & quadratic.</div>
+        </div>
+      </div>
+
+      <!-- Another Subject Card -->
+      <div class="subject-card">
+        <div class="graph-box"></div>
+        <div class="subject-info">
+          <div class="subject-title">History - World Wars</div>
+          <div class="subject-insight">You know the timelines well. Explore military strategies next.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
