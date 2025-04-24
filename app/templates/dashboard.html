@@ -18,14 +18,21 @@
     <div class="friend-icon"></div>
   </div>
 
+
+
   <!-- Main Content Area -->
   <div class="main-content">
 
     <!-- Top Nav -->
     <div class="top-nav">
-      <div>Welcome back, Username! </div>
-      <div class="create-btn">+ Create Study Subject</div>
+      <div>Welcome back, {{current_user.username}}! </div>
+      <div class="top-buttons">
+        <div class="create-btn">+ Create Study Subject</div>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Log Out</a>
+      </div>
     </div>
+
+    
 
     <!-- Dashboard Body -->
     <div class="dashboard-body">
