@@ -55,7 +55,19 @@ body {
     padding: 0 2rem;
     font-size: 1.2rem;
 }
-
+.top-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.create-btn, .logout-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
 .create-btn {
     padding: 8px 16px;
     background-color: #ffffff;
@@ -64,6 +76,27 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
+.create-btn:hover {
+    background-color: #7f5af0;
+    color: #fff;
+}
+.logout-btn {
+    padding: 8px 16px;
+    background-color: #ffffff;
+    color: #7f5af0;
+    border-radius: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #7f5af0;
+    transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+    background-color: #7f5af0;
+    color: #fff;
+}
+
 
 .dashboard-body {
     padding: 2rem;

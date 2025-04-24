@@ -23,6 +23,8 @@ This application motivates users by giving them clear visual feedback and enable
 | 23808253   | Kai Fletcher  | k-train-money        | 
 | 23236855   | Ruben ho Ho	  |  Rbho10       |
 
+A user.db database has been created to store user's credentials in a secure manner. Passwords are stored in the form of hash (password + salt) in the database.
+
 The code will be stored in a zip folder. Unzipping the folder will decompress the contents of the folder. 
 
 Steps to reproduce/run the code:
