@@ -1,0 +1,59 @@
+{% extends "homebase.html" %}
+
+{% block title %}Friend Profile | ProTrack{% endblock %}
+
+{% block body %}
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <div class="friends-list">
+
+        <!-- Friend 1 -->
+
+        <div class="friend-card">
+            <div class="friend-info">
+                <div class="friend-avatar"></div>
+                <div class="friend-details">
+                    <div class="friend-name">username1</div>
+                    <div class="friend-meta">12 friends • Student</div>
+                </div>
+            </div>
+            <button class="go-btn">Go To</button>
+        </div>
+
+
+        <!-- Friend 2 -->
+        <div class="friend-card">
+            <div class="friend-info">
+                <div class="friend-avatar"></div>
+                <div class="friend-details">
+                    <div class="friend-name">username2</div>
+                    <div class="friend-meta">12 friends • Student</div>
+                </div>
+            </div>
+            <button class="go-btn">Go To</button>
+        </div>
+
+        <!-- Friend 3 -->
+        <div class="friend-card">
+            <div class="friend-info">
+                <div class="friend-avatar"></div>
+                <div class="friend-details">
+                    <div class="friend-name">username3</div>
+                    <div class="friend-meta">12 friends • Student</div>
+                </div>
+            </div>
+            <button class="go-btn">Go To</button>
+        </div>
+
+        <!-- Add Friend -->
+        <div class="add-friend-card">
+            <input type="text" class="add-input" placeholder="Enter username...">
+            <button class="add-btn">Add Friend</button>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

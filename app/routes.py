@@ -84,3 +84,6 @@ def show_users():
     users = User.query.all()
     return "<br>".join([f"{u.id}: {u.username} - {u.email} - {u.first_name} - {u.created_at}" for u in users])
 
+@app.route('/friends')
+def friends():
+    return render_template("friends.html")
