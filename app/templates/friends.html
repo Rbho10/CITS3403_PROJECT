@@ -7,46 +7,12 @@
 <!-- Main Content -->
 <div class="main-content">
 
+    <!-- Top Navigation -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search friends..." oninput="searchFriends()">
+    </div>
+
     <div class="friends-list">
-
-        <!-- Friend 1 -->
-
-        <div class="friend-card">
-            <div class="friend-info">
-                <div class="friend-avatar"></div>
-                <div class="friend-details">
-                    <div class="friend-name">username1</div>
-                    <div class="friend-meta">12 friends • Student</div>
-                </div>
-            </div>
-            <button class="go-btn">Go To</button>
-        </div>
-
-
-        <!-- Friend 2 -->
-        <div class="friend-card">
-            <div class="friend-info">
-                <div class="friend-avatar"></div>
-                <div class="friend-details">
-                    <div class="friend-name">username2</div>
-                    <div class="friend-meta">12 friends • Student</div>
-                </div>
-            </div>
-            <button class="go-btn">Go To</button>
-        </div>
-
-        <!-- Friend 3 -->
-        <div class="friend-card">
-            <div class="friend-info">
-                <div class="friend-avatar"></div>
-                <div class="friend-details">
-                    <div class="friend-name">username3</div>
-                    <div class="friend-meta">12 friends • Student</div>
-                </div>
-            </div>
-            <button class="go-btn">Go To</button>
-        </div>
-
         <!-- Add Friend -->
         <div class="add-friend-card">
             <input type="text" class="add-input" placeholder="Enter username...">
@@ -54,6 +20,47 @@
         </div>
 
     </div>
+    <div class="friends-list" id="friends-list">
+        <!-- This will be dynamically updated -->
+    </div>
+
 </div>
 
+
+<!--AJAX Script implemented to search for a matching friend's username-->
+<script>
+function searchFriends() {
+    const query = document.getElementById('search-input').value;
+
+    fetch('/search_friends?query=' + encodeURIComponent(query))
+    .then(response => response.json())
+    .then(data => {
+        const friendsList = document.getElementById('friends-list');
+        friendsList.innerHTML = ''; // Clear old list
+
+        data.friends.forEach(friend => {
+            const card = `
+                <div class="friend-card">
+                    <div class="friend-info">
+                        <div class="friend-avatar"></div>
+                        <div class="friend-details">
+                            <div class="friend-name">${friend.username}</div>
+                        </div>
+                    </div>
+                    <button class="go-btn">Go To</button>
+                </div>
+            `;
+            friendsList.innerHTML += card;
+        });
+
+        if (data.friends.length === 0) {
+            friendsList.innerHTML = '<div>No friends found!</div>';
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Load initial friends when page first opens
+document.addEventListener('DOMContentLoaded', searchFriends);
+</script>
 {% endblock %}
