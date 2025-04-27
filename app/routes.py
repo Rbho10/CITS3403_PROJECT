@@ -25,7 +25,7 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             flash("Logged in successfully!", "success")
-            return redirect(url_for('dashboard'))  # Or your main app route
+            return redirect(url_for('dashboard'))  
         else:
             flash("Invalid username or password.", "danger")
 
