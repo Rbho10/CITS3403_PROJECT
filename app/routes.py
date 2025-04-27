@@ -7,9 +7,6 @@ from flask_login import login_user, logout_user, current_user
 from app.models import db, User
 from app.signup_form import SignUpForm
 
-
-
-
 @app.route('/')
 def welcome():
     return render_template('welcomePage.html')
@@ -87,3 +84,19 @@ def show_users():
 @app.route('/friends')
 def friends():
     return render_template("friends.html")
+
+@app.route('/search_friends')
+def search_friends():
+    query = request.args.get('query', '')
+
+   #find all users whose username contains the query text, case-insensitive.
+    friends = User.query.filter(User.username.ilike(f"%{query}%")).all()
+
+    # Format results
+    results = []
+    for friend in friends:
+        results.append({
+            'username': friend.username,
+        })
+
+    return jsonify({'friends': results})

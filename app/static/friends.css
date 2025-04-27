@@ -44,6 +44,31 @@ body {
     display: flex;
     flex-direction: column;
 }
+.search-bar {
+    width: 100%;
+    padding: 20px 2rem 10px 2rem;
+    background-color: #f4f6f9;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar input {
+    width: 50%;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: #7f5af0;
+    outline: none;
+    box-shadow: 0 0 5px rgba(127, 90, 240, 0.5);
+}
+
 .friends-btn {
     padding: 8px 16px;
     background-color: #ffffff;
