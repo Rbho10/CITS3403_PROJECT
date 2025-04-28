@@ -1,0 +1,25 @@
+{% extends "homebase.html" %}
+
+{% block title %}Subjects | ProTrack{% endblock %}
+
+{% block body %}
+
+<!--Main Content-->
+<div class="main-content">
+    <!--Top Navigation-->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search subject..." oninput="searchSubject()">
+    </div>
+    
+    <div class="create-subject-btn">
+        <a href="{{ url_for('createSubject') }}" class="create-subject-btn">Create Subject</a>
+    </div>
+
+    <div class="subjects-list" id="subjects-list">
+        <!--insert dynamic subjects list here-->
+    </div>
+</div>
+
+
+
+{%endblock%}
