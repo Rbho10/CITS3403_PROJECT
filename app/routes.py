@@ -139,3 +139,11 @@ def add_friend():
         return '', 200
     else:
         return '', 400
+
+@app.route('/subjects')
+def subjects():
+    return render_template("mySubjectsPage.html")
+
+@app.route('/create_subject')
+def createSubject():
+    return render_template("createStudySubject.html")
