@@ -1,0 +1,28 @@
+body {
+    background: linear-gradient(to right, #dfe9f3, #ffffff);
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.hero-sub {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.feature-card {
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}

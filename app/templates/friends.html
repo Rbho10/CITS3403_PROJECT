@@ -1,0 +1,82 @@
+{% extends "homebase.html" %}
+
+{% block title %}Friend Profile | ProTrack{% endblock %}
+
+{% block body %}
+
+<!-- Main Content -->
+<div class="main-content">
+
+    <!-- Top Navigation -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search friends..." oninput="searchFriends()">
+    </div>
+
+    <div class="friends-list" id="friends-list">
+        <!-- Friends list dynamically loaded here -->
+    </div>
+
+</div>
+
+<!-- AJAX Script -->
+<script>
+    function searchFriends() {
+        const query = document.getElementById('search-input').value;
+
+        fetch('/search_friends?query=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                const friendsList = document.getElementById('friends-list');
+                friendsList.innerHTML = ''; // Clear old list
+
+                data.friends.forEach(friend => {
+                    const actionButton = friend.is_friend
+                        ? `<button class="go-btn" onclick="location.href='/friend/${friend.id}'">Go To</button>`
+                        : `<button class="add-btn" onclick="addFriend(${friend.id})">Add Friend</button>`;
+
+                    const card = `
+                <div class="friend-card">
+                    <div class="friend-info">
+                        <div class="friend-avatar"></div>
+                        <div class="friend-details">
+                            <div class="friend-name">${friend.username}</div>
+                            <div class="friend-meta">${friend.meta}</div>
+                        </div>
+                    </div>
+                    ${actionButton}
+                </div>
+            `;
+                    friendsList.innerHTML += card;
+                });
+
+                if (data.friends.length === 0) {
+                    friendsList.innerHTML = '<div>No friends found!</div>';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function addFriend(friendId) {
+        fetch('/add_friend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ friend_id: friendId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Friend added successfully!');
+                    searchFriends(); // Refresh list after adding
+                } else {
+                    alert('Error adding friend.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Load initial friends when page opens
+    document.addEventListener('DOMContentLoaded', searchFriends);
+</script>
+
+{% endblock %}
