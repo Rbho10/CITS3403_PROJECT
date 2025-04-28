@@ -18,3 +18,11 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return f"<User {self.id}: {self.username}>"
+    
+
+class Friendship(db.Model):
+    __tablename__ = 'friendships'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+

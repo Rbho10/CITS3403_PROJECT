@@ -1,10 +1,10 @@
 from flask import render_template, redirect, url_for, flash
 from app import app
-from flask import request, jsonify
+from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user
-from app.models import db, User
+from app.models import db, User, Friendship
 from app.signup_form import SignUpForm
 
 @app.route('/')
@@ -89,14 +89,53 @@ def friends():
 def search_friends():
     query = request.args.get('query', '')
 
-   #find all users whose username contains the query text, case-insensitive.
-    friends = User.query.filter(User.username.ilike(f"%{query}%")).all()
+    user_id = current_user.id
 
-    # Format results
+    if query:
+        users = User.query.filter(User.username.ilike(f"%{query}%")).all()
+    else:
+        users = User.query.all()
+
     results = []
-    for friend in friends:
+
+    for user in users:
+        if user_id is not None and user.id == user_id:
+            continue  # skip yourself
+
+        # Default to not a friend
+        is_friend = False
+
+        if user_id:
+            # Check if friendship exists (in either direction)
+            friendship = Friendship.query.filter(
+                ((Friendship.user_id == user_id) & (Friendship.friend_id == user.id)) |
+                ((Friendship.user_id == user.id) & (Friendship.friend_id == user_id))
+            ).first()
+
+            if friendship:
+                is_friend = True
+
         results.append({
-            'username': friend.username,
+            'id': user.id,
+            'username': user.username,
+            'meta': f"{user.first_name} {user.last_name}" if user.first_name and user.last_name else "",
+            'is_friend': is_friend
         })
 
-    return jsonify({'friends': results})
+    return jsonify(friends=results)
+
+
+@app.route('/add_friend', methods=['POST'])
+def add_friend():
+    data = request.get_json()
+    friend_id = data['friend_id']
+    user_id = current_user.id
+
+    existing = Friendship.query.filter_by(user_id=user_id, friend_id=friend_id).first()
+    if not existing:
+        friendship = Friendship(user_id=user_id, friend_id=friend_id)
+        db.session.add(friendship)
+        db.session.commit()
+        return '', 200
+    else:
+        return '', 400
