@@ -13,7 +13,7 @@ class CreateStudySubjectForm(FlaskForm):
                                                       (12, "One Year"),
                                                       (36, "Three Years")]) #integers are indicative of month length
     privacy = SelectField("Privacy Setting", choices=[("public", "Public"), 
-                                                      ("private", "Private")
+                                                      ("private", "Private"),
                                                       ("hidden", "Hidden")])
     opinion_toggle = BooleanField("Allow Opinions", default="checked")
     submit = SubmitField('Create Subject')

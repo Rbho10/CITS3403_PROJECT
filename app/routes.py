@@ -4,8 +4,9 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user
-from app.models import db, User, Friendship
+from app.models import db, User, Friendship, Subjects
 from app.signup_form import SignUpForm
+from app.createStudySubject_form import CreateStudySubjectForm
 
 @app.route('/')
 def welcome():
@@ -144,6 +145,37 @@ def add_friend():
 def subjects():
     return render_template("mySubjectsPage.html")
 
-@app.route('/create_subject')
+@app.route('/create_subject', methods=["POST","GET"])
 def createSubject():
-    return render_template("createStudySubject.html")
+    form = CreateStudySubjectForm()
+
+    #TODO:
+    #implement unique ids for each subject
+    #implement posting info
+    if request.method == "POST" and form.validate_on_submit():
+        subject_name = request.form["subject_name"]
+        graph_type = request.form["graph_type"]
+        graph_scale = request.form["graph_scale"]
+        privacy = request.form["privacy"]
+        opinion_toggle = request.form["opinion_toggle"]
+
+        #check for duplicate subject names
+        if Subjects.query.filter_by(subject_name=subject_name).first():
+            flash("Subject already exists.", "danger")
+            return render_template("createStudySubject.html", form=form)
+
+        #create new subject
+        new_subject = Subjects(
+            subject_name=subject_name,
+            graph_type=graph_type,
+            graph_scale=graph_scale,
+            privacy=privacy,
+            opinion_toggle=opinion_toggle
+        )
+        db.session.add(new_subject)
+        db.session.commit()
+
+        flash("New subject created.", "success")
+        return redirect(render_template("mySubjectsPage.html"))
+
+    return render_template("createStudySubject.html", form=form)

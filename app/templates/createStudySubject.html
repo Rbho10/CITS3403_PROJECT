@@ -8,28 +8,40 @@
         <div class="col-md-6 col-lg-5">
             <form method="POST" action="{{ url_for('createSubject') }}" class="p-4 shadow rounded bg-white">
                 <h3 class="text-center text-primary mb-4">Create a New Subject</h3>
+                {{ form.hidden_tag() }}
+                
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field_errors in form.errors.values() %}
+                        {% for error in field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <div class="mb-3">
-                    <label for="subject_name" class="form-label">Subject Name</label>
-                    <input type="text" class="form-control" name="subject_name" id="subject_name" required>
+                    {{ form.subject_name.label(class="form-label") }}
+                    {{ form.subject_name(class="form-control") }}
                 </div>
-                <div class="mb-3"> <!--use css and javascript to make dropdown menu-->
-                    <label for="graph_type" class="form-label">Graph Type</label>
-                    <input type="text" class="form-control" name="graph_type" id="graph_type" required>
+                <div class="mb-3">
+                    {{ form.graph_type.label(class="form-label") }}
+                    {{ form.graph_type(class="form-control") }}
                 </div>
-                <div class="mb-3"> <!--use css and javascript to make dropdown menu-->
-                    <label for="graph_scale" class="form-label">Graph Scale</label>
-                    <input type="text" class="form-control" name="graph_scale" id="graph_scale" required>
+                <div class="mb-3">
+                    {{ form.graph_scale.label(class="form-label") }}
+                    {{ form.graph_scale(class="form-control") }}
                 </div>
-                <div class="mb-3"> <!--use css and javascript to make dropdown menu-->
-                    <label for="privacy" class="form-label">Privacy</label>
-                    <input type="text" class="form-control" name="privacy" id="privacy" required>
+                <div class="mb-3">
+                    {{ form.privacy.label(class="form-label") }}
+                    {{ form.privacy(class="form-control") }}
                 </div>
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" id="opinion_toggle" name="opinion_toggle" checked="checked">
-                    <label class="form-check-label" for="opinion_toggle">Allow Opinions</label>
+                    {{ form.opinion_toggle.label(class="form-label") }}
+                    {{ form.opinion_toggle(class="form-control") }}
                 </div>
                 <div>
-                    <!--put graph preview here-->
+                    <!--put graph preview here in a different column-->
                 </div>
                 <div class="d-grid">
                     <button type="submit" class="btn btn-primary">Create Subject</button>
