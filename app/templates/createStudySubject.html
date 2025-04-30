@@ -1,4 +1,4 @@
-{% extends "homebase.html" %}
+{% extends "mySubjectsPage.html" %}
 
 {% block title %}Create Study Subject | ProTrack{% endblock %}
 
@@ -24,27 +24,8 @@
                     {{ form.subject_name.label(class="form-label") }}
                     {{ form.subject_name(class="form-control") }}
                 </div>
-                <div class="mb-3">
-                    {{ form.graph_type.label(class="form-label") }}
-                    {{ form.graph_type(class="form-control") }}
-                </div>
-                <div class="mb-3">
-                    {{ form.graph_scale.label(class="form-label") }}
-                    {{ form.graph_scale(class="form-control") }}
-                </div>
-                <div class="mb-3">
-                    {{ form.privacy.label(class="form-label") }}
-                    {{ form.privacy(class="form-control") }}
-                </div>
-                <div class="form-check mb-3">
-                    {{ form.opinion_toggle.label(class="form-label") }}
-                    {{ form.opinion_toggle(class="form-control") }}
-                </div>
-                <div>
-                    <!--put graph preview here in a different column-->
-                </div>
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Create Subject</button>
+                    {{ form.submit(class="btn btn-primary") }}
                 </div>
             </form>
         </div>

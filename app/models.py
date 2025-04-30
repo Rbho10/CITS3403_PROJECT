@@ -33,7 +33,7 @@ class Subjects(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     subject_name = db.Column(db.String(30), unique=True, nullable=False)
-    graph_type = db.Column(db.String(20), nullable=False)
-    graph_scale = db.Column(db.Integer, nullable=False)
-    privacy = db.Column(db.String(20), nullable=False)
-    opinion_toggle = db.Column(db.Boolean, default=True, nullable=False)
+    #graph_type = db.Column(db.String(20), nullable=False)
+    #graph_scale = db.Column(db.Integer, nullable=False)
+    #privacy = db.Column(db.String(20), nullable=False)
+    #opinion_toggle = db.Column(db.Boolean, default=True, nullable=False)
