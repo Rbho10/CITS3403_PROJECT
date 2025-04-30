@@ -158,7 +158,7 @@ def search_subjects():
     results = []
 
     for subject in subjects:
-        if user_id is not None and subject.id == user_id:
+        if user_id is not None and subject.user_id != user_id:
             continue
 
         results.append({
