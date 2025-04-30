@@ -20,6 +20,38 @@
     </div>
 </div>
 
+<!--AJAX Script-->
+<script>
+    function searchSubject() {
+        const query = document.getElementById('search-input').value;
+        fetch('/search_subjects?query=' + encodeURIComponent(query))
+            .then(response => response.json())
+            .then(data => {
+                const subjectsList = document.getElementById('subjects-list');
+                subjectsList.innerHTML = ''; // Clear old list
+
+                data.studysubject.forEach(subject => {
+                    const card = `
+                    <div class="subject-card">
+                        <div class="subject-info">
+                            <div class="subject-details">
+                                <div class="subject-name">${subject.subject_name}</div>
+                            </div>
+                        </div>
+                        <button class="go-btn" onclick="location.href='/subject/${subject.id}'">Go To</button>
+                    </div>
+            `;
+                    subjectsList.innerHTML += card;
+                });
+
+                if (data.studysubject.length === 0) {
+                    subjectsList.innerHTML = '<div>No subjects found!</div>';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    document.addEventListener('DOMContentLoaded', searchSubject);
+</script>
 
 
 {%endblock%}

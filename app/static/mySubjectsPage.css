@@ -76,3 +76,37 @@ body {
     background-color: #7f5af0;
     color: #fff;
 }
+
+.subjects-list {
+    padding: 2rem;
+}
+
+.subject-card {
+    background-color: #e5d8ff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+}
+
+.subject-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.subject-name {
+    font-weight: bold;
+    color: #333;
+}
+
+.go-btn {
+    padding: 6px 14px;
+    border: none;
+    background-color: #7f5af0;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}

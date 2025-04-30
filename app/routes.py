@@ -145,14 +145,34 @@ def add_friend():
 def subjects():
     return render_template("mySubjectsPage.html")
 
+@app.route('/search_subjects')
+def search_subjects():
+    query = request.args.get('query', '')
+    user_id = current_user.id
+
+    if query:
+        subjects = Subjects.query.filter(Subjects.subject_name.ilike(f"%{query}%")).all()
+    else:
+        subjects = Subjects.query.all()
+    
+    results = []
+
+    for subject in subjects:
+        if user_id is not None and subject.id == user_id:
+            continue
+
+        results.append({
+            'id': subject.id,
+            'subject_name': subject.subject_name
+        })
+    
+    return jsonify(studysubject=results)
+
 @app.route('/create_subject', methods=["POST","GET"])
 def createSubject():
     form = CreateStudySubjectForm()
     user_id = current_user.id
 
-    #TODO:
-    #implement unique ids for each subject
-    #implement posting info
     if request.method == "POST" and form.validate_on_submit():
         subject_name = request.form["subject_name"]
         #graph_type = request.form["graph_type"]
