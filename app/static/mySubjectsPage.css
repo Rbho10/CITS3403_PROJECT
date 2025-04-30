@@ -60,15 +60,12 @@ body {
 }
 
 .create-subject-btn {   /*correct button so that it looks like a smaller version of the top nav buttons and is aligned right*/
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    padding: 8px 16px;
+    background-color: #ffffff;
+    color: #7f5af0;
+    border-radius: 20px;
     font-weight: bold;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    justify-content: right;
+    cursor: pointer; 
     text-decoration: none;
 }
 
