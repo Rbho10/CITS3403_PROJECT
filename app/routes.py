@@ -148,16 +148,17 @@ def subjects():
 @app.route('/create_subject', methods=["POST","GET"])
 def createSubject():
     form = CreateStudySubjectForm()
+    user_id = current_user.id
 
     #TODO:
     #implement unique ids for each subject
     #implement posting info
     if request.method == "POST" and form.validate_on_submit():
         subject_name = request.form["subject_name"]
-        graph_type = request.form["graph_type"]
-        graph_scale = request.form["graph_scale"]
-        privacy = request.form["privacy"]
-        opinion_toggle = request.form["opinion_toggle"]
+        #graph_type = request.form["graph_type"]
+        #graph_scale = request.form["graph_scale"]
+        #privacy = request.form["privacy"]
+        #opinion_toggle = request.form["opinion_toggle"]
 
         #check for duplicate subject names
         if Subjects.query.filter_by(subject_name=subject_name).first():
@@ -166,11 +167,12 @@ def createSubject():
 
         #create new subject
         new_subject = Subjects(
+            user_id=user_id,
             subject_name=subject_name,
-            graph_type=graph_type,
-            graph_scale=graph_scale,
-            privacy=privacy,
-            opinion_toggle=opinion_toggle
+            #graph_type=graph_type,
+            #graph_scale=graph_scale,
+            #privacy=privacy,
+            #opinion_toggle=opinion_toggle
         )
         db.session.add(new_subject)
         db.session.commit()
