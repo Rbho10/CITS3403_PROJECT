@@ -181,7 +181,7 @@ def createSubject():
         #opinion_toggle = request.form["opinion_toggle"]
 
         #check for duplicate subject names
-        if Subjects.query.filter_by(subject_name=subject_name).first():
+        if Subjects.query.filter_by(subject_name=subject_name, user_id=user_id).first():
             flash("Subject already exists.", "danger")
             return render_template("createStudySubject.html", form=form)
 
@@ -198,6 +198,6 @@ def createSubject():
         db.session.commit()
 
         flash("New subject created.", "success")
-        return redirect(render_template("mySubjectsPage.html"))
+        return redirect(url_for("subjects"))
 
     return render_template("createStudySubject.html", form=form)
