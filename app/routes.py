@@ -162,7 +162,8 @@ def add_logsession():
         goal_progress=data.get('goal_progress'),
         focus_level=int(data.get('focus_level')),
         effectiveness=int(data.get('effectiveness')),
-        subject_id=int(data.get('subject_id'))
+        subject_id=int(data.get('subject_id')),
+        user_id=current_user.id
     )
     db.session.add(new_log)
     db.session.commit()
