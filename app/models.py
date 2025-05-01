@@ -26,3 +26,50 @@ class Friendship(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+class Subject(db.Model):
+    __tablename__ = 'subjects'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    user = db.relationship('User', backref=db.backref('subjects', lazy=True))
+
+    def __repr__(self):
+        return f"<Subject {self.id}: {self.name}>"
+    
+class LogSession(db.Model):
+    __tablename__ = 'logsessions'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(255), nullable=False)
+    study_duration = db.Column(db.Integer)  # in minutes
+    break_time = db.Column(db.Integer, default=0)
+    mood_level = db.Column(db.Integer)
+    study_environment = db.Column(db.String(50))
+    mental_load = db.Column(db.Integer)
+    distractions = db.Column(db.String(255))
+    goal_progress = db.Column(db.String(20))
+    focus_level = db.Column(db.Integer)
+    effectiveness = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    subject = db.relationship('Subject', backref=db.backref('logsessions', lazy=True))
+    user = db.relationship('User', backref=db.backref('logsessions', lazy=True))
+
+    def __repr__(self):
+        return f"<LogSession {self.id} for Subject {self.subject_id} by User {self.user_id}>"
+class SharedSubject(db.Model):
+    __tablename__ = 'shared_subjects'
+    id = db.Column(db.Integer, primary_key=True)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
+    shared_with_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    can_contribute = db.Column(db.Boolean, default=False)
+    can_edit = db.Column(db.Boolean, default=False)
+
+    subject = db.relationship('Subject', backref='shared_with')
+    shared_with_user = db.relationship('User', backref='shared_subjects')
+
+    def __repr__(self):
+        return f"<SharedSubject: Subject {self.subject_id} shared with User {self.shared_with_user_id}>"

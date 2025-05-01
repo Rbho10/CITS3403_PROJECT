@@ -4,7 +4,7 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user
-from app.models import db, User, Friendship
+from app.models import db, User, Friendship, Subject, LogSession
 from app.signup_form import SignUpForm
 
 @app.route('/')
@@ -139,3 +139,32 @@ def add_friend():
         return '', 200
     else:
         return '', 400
+    
+@app.route('/add_subject', methods=["POST"])
+def add_subject():
+    subject_name = request.form.get('name')
+    new_subject = Subject(name=subject_name, user_id=current_user.id)
+    db.session.add(new_subject)
+    db.session.commit()
+    return redirect(url_for('dashboard'))
+
+@app.route('/add_logsession', methods=["POST"])
+def add_logsession():
+    data = request.form
+    new_log = LogSession(
+        description=data.get('description'),
+        study_duration=int(data.get('study_duration')),
+        break_time=int(data.get('break_time', 0)),
+        mood_level=int(data.get('mood_level')),
+        study_environment=data.get('study_environment'),
+        mental_load=int(data.get('mental_load')),
+        distractions=data.get('distractions', ''),
+        goal_progress=data.get('goal_progress'),
+        focus_level=int(data.get('focus_level')),
+        effectiveness=int(data.get('effectiveness')),
+        subject_id=int(data.get('subject_id'))
+    )
+    db.session.add(new_log)
+    db.session.commit()
+    return redirect(url_for('dashboard'))
+
