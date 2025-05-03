@@ -3,86 +3,143 @@
 
 {% block body %}
 <div class="dashboard-body">
-  {% if subjects %}
-    {% for subj in subjects %}
-      {% set data = insights[subj.id] %}
-      <div class="subject-card">
 
-        <div class="graph-box">
-          {% if data.plot_url %}
-            <img
-              src="{{ data.plot_url }}"
-              alt="Productivity chart for {{ subj.name|e }}"
-            >
-            <button
-              class="expand-btn"
-              onclick="window.open('{{ data.plot_url }}', '_blank')"
-              title="View full-size"
-            >🔍</button>
-          {% else %}
-            <div class="no-data">No chart available</div>
-          {% endif %}
-        </div>
+  {# If the user has either owned or shared subjects #}
+  {% if subjects or shared %}
+  
+    {# — YOUR OWN SUBJECTS — #}
+    {% if subjects %}
+      <h2>Your Subjects</h2>
+      {% for subj in subjects %}
+        {% set data = insights.get(subj.id) %}
+        <div class="subject-card">
 
-        <div class="subject-info">
-          <div class="subject-title" style="position: relative;">
-            {{ subj.name }}
-            <!-- Share button -->
-            <button
-              class="share-btn"
-              onclick="toggleSharePanel({{ subj.id }})"
-              title="Share this subject"
-              style="position: absolute; top: 0; right: 0; background: transparent; border: none; cursor: pointer;"
-            >⇪</button>
-          </div>
-
-          <!-- Hidden share panel -->
-          <div
-            class="share-panel"
-            id="share-panel-{{ subj.id }}"
-            style="display: none; position: absolute; top: 2rem; right: 1rem; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index:10;"
-          >
-            <ul style="list-style:none; margin:0; padding:0.5rem;">
-              {% for u in share_users %}
-                <li
-                  style="padding:0.25rem 0.5rem; cursor:pointer;"
-                  onclick="shareToUser({{ subj.id }}, {{ u.id }})"
-                >
-                  {{ u.username }}
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-
-          <div
-            class="subject-insight"
-            id="insight-{{ subj.id }}"
-          >
-            {% for line in data.performance_insight %}
-              <p>{{ line }}</p>
-            {% endfor %}
-            {% if data.performance_insight|length > 3 %}
+          <div class="graph-box">
+            {% if data and data.plot_url %}
+              <img
+                src="{{ data.plot_url }}"
+                alt="Chart for {{ subj.name|e }}"
+              >
               <button
-                class="expand-insights"
-                data-subj-id="{{ subj.id }}"
-                onclick="toggleText(this.dataset.subjId)"
-              >More…</button>
+                class="expand-btn"
+                onclick="window.open('{{ data.plot_url }}','_blank')"
+                title="View full-size"
+              >🔍</button>
+            {% else %}
+              <div class="no-data">No chart available</div>
             {% endif %}
           </div>
+
+          <div class="subject-info">
+            <div class="subject-title" style="position: relative;">
+              {{ subj.name }}
+              <!-- Share button -->
+              <button
+                class="share-btn"
+                onclick="toggleSharePanel({{ subj.id }})"
+                title="Share this subject"
+                style="position: absolute; top: 0; right: 0; background: transparent; border: none; cursor: pointer;"
+              >⇪</button>
+            </div>
+
+            <!-- Hidden share panel -->
+            <div
+              class="share-panel"
+              id="share-panel-{{ subj.id }}"
+              style="display: none; position: absolute; top: 2rem; right: 1rem; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index:10;"
+            >
+              <ul style="list-style:none; margin:0; padding:0.5rem;">
+                {% for u in share_users %}
+                  <li
+                    style="padding:0.25rem 0.5rem; cursor:pointer;"
+                    onclick="shareToUser({{ subj.id }}, {{ u.id }})"
+                  >
+                    {{ u.username }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <div class="subject-insight" id="insight-{{ subj.id }}">
+              {% if data and data.performance_insight %}
+                {% for line in data.performance_insight %}
+                  <p>{{ line }}</p>
+                {% endfor %}
+              {% endif %}
+              {% if data and data.performance_insight|length > 3 %}
+                <button
+                  class="expand-insights"
+                  data-subj-id="{{ subj.id }}"
+                  onclick="toggleText(this.dataset.subjId)"
+                >More…</button>
+              {% endif %}
+            </div>
+          </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    {% endif %}
+
+    {# — SHARED WITH YOU — #}
+    {% if shared %}
+      <h2>Shared with you</h2>
+      {% for sh in shared %}
+        {% set data = insights_shared.get(sh.subject.id) %}
+        <div class="subject-card shared-card">
+          <div class="graph-box">
+            {% if data and data.plot_url %}
+              <img src="{{ data.plot_url }}"
+                   alt="Chart for {{ sh.subject.name|e }}">
+              <button
+                class="expand-btn"
+                onclick="window.open('{{ data.plot_url }}','_blank')"
+                title="View full-size"
+              >🔍</button>
+            {% else %}
+              <div class="no-data">No chart available</div>
+            {% endif %}
+          </div>
+
+          <div class="subject-info">
+            <div class="subject-title">
+              {{ sh.subject.name }}
+              <small style="margin-left:1rem;color:#555;">
+                from {{ sh.owner.username }}
+              </small>
+            </div>
+            <div class="subject-insight" id="insight-{{ sh.subject.id }}">
+              {% if data and data.performance_insight %}
+                {% for line in data.performance_insight %}
+                  <p>{{ line }}</p>
+                {% endfor %}
+              {% endif %}
+              {% if data and data.performance_insight|length > 3 %}
+                <button
+                  class="expand-insights"
+                  data-subj-id="{{ sh.subject.id }}"
+                  onclick="toggleText(this.dataset.subjId)"
+                >More…</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+
   {% else %}
     <p>You're not enrolled in any subjects yet.</p>
   {% endif %}
+
 </div>
 
 <script>
   function toggleText(id) {
     const insight = document.getElementById(`insight-${id}`);
     insight.classList.toggle('expanded');
-    insight.querySelector('.expand-insights').textContent =
-      insight.classList.contains('expanded') ? 'Less…' : 'More…';
+    const btn = insight.querySelector('.expand-insights');
+    if (btn) {
+      btn.textContent = insight.classList.contains('expanded') ? 'Less…' : 'More…';
+    }
   }
 
   function toggleSharePanel(id) {
@@ -94,10 +151,7 @@
     fetch("{{ url_for('share_subject') }}", {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        subject_id: subjectId,
-        target_user_id: targetUserId
-      })
+      body: JSON.stringify({ subject_id: subjectId, target_user_id: targetUserId })
     })
     .then(r => r.json())
     .then(data => {
@@ -108,7 +162,6 @@
       } else {
         alert('Error sharing.');
       }
-      // hide panel
       document.getElementById(`share-panel-${subjectId}`).style.display = 'none';
     });
   }

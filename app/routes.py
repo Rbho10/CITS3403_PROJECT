@@ -65,7 +65,7 @@ def dashboard():
             shared.append(sh)
 
     insights_shared = {
-        (sh.owner_id, sh.subject.id): _build_insight_data(sh.owner_id, sh.subject.name)
+        sh.subject.id: _build_insight_data(sh.owner_id, sh.subject.name)
         for sh in shared
     }
 
