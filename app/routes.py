@@ -1,11 +1,15 @@
-from flask import render_template, redirect, url_for, flash
+import os
+import openai
+from flask import render_template, redirect, url_for, flash, request, abort
+from flask_login import login_required, current_user, login_user, logout_user
+from app.generate_insights import generate_insights_core
 from app import app
 from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
-from flask_login import login_user, logout_user, current_user
-from app.models import db, User, Friendship
+from app.models import db, User, Friendship, Subject, SharedSubject
 from app.signup_form import SignUpForm
+from app.generate_insights import generate_insights_core, _build_insight_data
 
 @app.route('/')
 def welcome():
@@ -35,8 +39,26 @@ def logout():
     return redirect(url_for('welcome'))
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
-    return render_template("dashboard.html", user=current_user)
+    all_subjects = current_user.subjects
+    unique_subjects = []
+    seen = set()
+    for subj in all_subjects:
+        if subj.name not in seen:
+            seen.add(subj.name)
+            unique_subjects.append(subj)
+
+    insights = {
+        subj.id: _build_insight_data(current_user.id, subj.name)
+        for subj in unique_subjects
+    }
+
+    return render_template(
+        'dashboard.html',
+        subjects=unique_subjects,
+        insights=insights
+    )
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
@@ -138,4 +160,14 @@ def add_friend():
         db.session.commit()
         return '', 200
     else:
-        return '', 400
+        return '', 
+
+@app.route('/insights/<int:user_id>/<path:subject>')
+@login_required
+def insights(user_id, subject):
+    # 1) permission: only yourself (or add sharing logic here)
+    if user_id != current_user.id:
+        abort(403)
+
+    # 2) hand off to the core generator
+    return generate_insights_core(user_id, subject)

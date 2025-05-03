@@ -1,42 +1,62 @@
 {% extends "homebase.html" %}
-
 {% block title %}Dashboard | ProTrack{% endblock %}
 
 {% block body %}
 <div class="dashboard-body">
-
-  <!-- Subject Card 1 -->
-  <div class="subject-card">
-    <div class="graph-box"></div>
-    <div class="subject-info">
-      <div class="subject-title">Biology - Genetics</div>
-      <div class="subject-insight">
-        You're mastering Mendelian inheritance! 80% accuracy this week.
+  {% if subjects %}
+    {% for subj in subjects %}
+      {% set data = insights[subj.id] %}
+      <div class="subject-card">
+        <div class="graph-box">
+          {% if data.plot_url %}
+            <!-- thumbnail -->
+            <img
+              src="{{ data.plot_url }}"
+              alt="Productivity chart for {{ subj.name|e }}"
+            >
+            <!-- zoom button -->
+            <button
+              class="expand-btn"
+              onclick="window.open('{{ data.plot_url }}', '_blank')"
+              title="View full-size"
+            >🔍</button>
+          {% else %}
+            <div class="no-data">No chart available</div>
+          {% endif %}
+        </div>
+        <div class="subject-info">
+          <div class="subject-title">{{ subj.name }}</div>
+          <div
+            class="subject-insight"
+            id="insight-{{ subj.id }}"
+          >
+            {% for line in data.performance_insight %}
+              <p>{{ line }}</p>
+            {% endfor %}
+            {% if data.performance_insight|length > 3 %}
+            <button
+            class="expand-insights"
+            data-subj-id="{{ subj.id }}"
+            onclick="toggleText(this.dataset.subjId)"
+            >
+              More…
+            </button>
+            {% endif %}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <!-- Subject Card 2 -->
-  <div class="subject-card">
-    <div class="graph-box"></div>
-    <div class="subject-info">
-      <div class="subject-title">Mathematics - Algebra</div>
-      <div class="subject-insight">
-        Steady progress on equations. Practice recommended: linear & quadratic.
-      </div>
-    </div>
-  </div>
-
-  <!-- Subject Card 3 -->
-  <div class="subject-card">
-    <div class="graph-box"></div>
-    <div class="subject-info">
-      <div class="subject-title">History - World Wars</div>
-      <div class="subject-insight">
-        You know the timelines well. Explore military strategies next.
-      </div>
-    </div>
-  </div>
-
+    {% endfor %}
+  {% else %}
+    <p>You're not enrolled in any subjects yet.</p>
+  {% endif %}
 </div>
+
+<script>
+  function toggleText(id) {
+    const insight = document.getElementById(`insight-${id}`);
+    insight.classList.toggle('expanded');
+    insight.querySelector('.expand-text-btn').textContent =
+      insight.classList.contains('expanded') ? 'Less…' : 'More…';
+  }
+</script>
 {% endblock %}
