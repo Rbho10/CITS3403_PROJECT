@@ -41,24 +41,76 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    all_subjects = current_user.subjects
-    unique_subjects = []
+    # —— OWNED SUBJECTS ——
+    raw = current_user.subjects
     seen = set()
-    for subj in all_subjects:
-        if subj.name not in seen:
-            seen.add(subj.name)
-            unique_subjects.append(subj)
+    owned = []
+    for s in raw:
+        if s.name not in seen:
+            seen.add(s.name)
+            owned.append(s)
 
-    insights = {
-        subj.id: _build_insight_data(current_user.id, subj.name)
-        for subj in unique_subjects
+    insights_owned = {
+        s.id: _build_insight_data(current_user.id, s.name)
+        for s in owned
     }
+    # —— SUBJECTS SHARED WITH ME ——
+    shares = SharedSubject.query.filter_by(shared_with_user_id=current_user.id).all()
+    seen_shared = set()
+    shared = []
+    for sh in shares:
+        key = (sh.owner_id, sh.subject.name)
+        if key not in seen_shared:
+            seen_shared.add(key)
+            shared.append(sh)
+
+    insights_shared = {
+        (sh.owner_id, sh.subject.id): _build_insight_data(sh.owner_id, sh.subject.name)
+        for sh in shared
+    }
+
+    # —— USERS I CAN SHARE TO ——
+    share_users = User.query.filter(User.id != current_user.id).all()
 
     return render_template(
         'dashboard.html',
-        subjects=unique_subjects,
-        insights=insights
+        subjects=owned,
+        insights=insights_owned,
+        shared=shared,
+        insights_shared=insights_shared,
+        share_users=share_users
+    
     )
+@app.route('/share_subject', methods=['POST'])
+@login_required
+def share_subject():
+    data = request.get_json() or {}
+    subject_id     = data.get('subject_id')
+    target_user_id = data.get('target_user_id')
+
+    if not subject_id or not target_user_id:
+        return jsonify(status='error', message='Missing parameters'), 400
+
+    subj = Subject.query.filter_by(
+        id=subject_id, user_id=current_user.id
+    ).first_or_404()
+
+    exists = SharedSubject.query.filter_by(
+        subject_id=subj.id,
+        owner_id=current_user.id,
+        shared_with_user_id=target_user_id
+    ).first()
+    if exists:
+        return jsonify(status='exists')
+
+    share = SharedSubject(
+        subject_id=subj.id,
+        owner_id=current_user.id,
+        shared_with_user_id=target_user_id
+    )
+    db.session.add(share)
+    db.session.commit()
+    return jsonify(status='ok')
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():

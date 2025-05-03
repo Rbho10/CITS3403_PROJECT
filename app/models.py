@@ -44,6 +44,14 @@ class Subject(db.Model):
     
 class SharedSubject(db.Model):
     __tablename__ = 'shared_subjects'
+    __table_args__ = (
+        db.UniqueConstraint(
+            'subject_id',
+            'owner_id',
+            'shared_with_user_id',
+            name='uq_shared_subject'
+        ),
+    )
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -55,7 +63,7 @@ class SharedSubject(db.Model):
     shared_with_user = db.relationship('User', foreign_keys=[shared_with_user_id], backref="shared_subjects")
 
     def __repr__(self):
-        return f"<SharedSubject: Subject {self.subject_id} shared with User {self.shared_with_user_id} from User {self.user_id}>"
+        return f"<SharedSubject: Subject {self.subject_id} shared with User {self.shared_with_user_id} from User {self.owner_id}>"
 class LogSession(db.Model):
     __tablename__ = 'logsessions'
     id = db.Column(db.Integer, primary_key=True)

@@ -232,4 +232,48 @@
     cursor: pointer;
     z-index: 1;
   }
+  /* position the share button in the title bar */
+  .subject-title {
+    position: relative;
+  }
+  
+  .share-btn {
+    position: absolute;
+    top: 0;
+    right: -2rem;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  /* hidden by default */
+  .share-panel {
+    display: none;
+    position: absolute;
+    top: 2.2rem;
+    right: 1rem;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 10;
+  }
+  
+  .share-panel.visible {
+    display: block;
+  }
+  
+  .share-panel ul {
+    list-style: none;
+  }
+  
+  .share-panel li {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .share-panel li:hover {
+    background: #f0f0f0;
+  }
   
