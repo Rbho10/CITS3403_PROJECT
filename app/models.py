@@ -62,14 +62,15 @@ class LogSession(db.Model):
         return f"<LogSession {self.id} for Subject {self.subject_id} by User {self.user_id}>"
 class SharedSubject(db.Model):
     __tablename__ = 'shared_subjects'
+    
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
     shared_with_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    can_contribute = db.Column(db.Boolean, default=False)
-    can_edit = db.Column(db.Boolean, default=False)
+    shared_by_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     subject = db.relationship('Subject', backref='shared_with')
-    shared_with_user = db.relationship('User', backref='shared_subjects')
+    shared_with_user = db.relationship('User', foreign_keys=[shared_with_user_id], backref='shared_subjects_received')
+    shared_by_user = db.relationship('User', foreign_keys=[shared_by_user_id], backref='shared_subjects_sent')
 
     def __repr__(self):
-        return f"<SharedSubject: Subject {self.subject_id} shared with User {self.shared_with_user_id}>"
+        return f"<SharedSubject: Subject {self.subject_id} shared from User {self.shared_by_user_id} to User {self.shared_with_user_id}>"
