@@ -75,6 +75,7 @@
   .create-btn,
   .logout-btn,
   .friends-btn {
+    text-decoration: none;
     padding: 8px 16px;
     border-radius: 20px;
     font-weight: bold;

@@ -223,3 +223,30 @@ def insights(user_id, subject):
 
     # 2) hand off to the core generator
     return generate_insights_core(user_id, subject)
+
+@app.route('/subjects')
+def subjects():
+    return render_template("mySubject.html")
+
+@app.route('/search_subjects')
+@login_required
+def search_subjects():
+    query = request.args.get('query', '').strip()
+    user_id = current_user.id
+
+    # Base query: only this user’s subjects
+    subjects_q = Subject.query.filter_by(user_id=user_id)
+
+    # If there’s a search term, add an ILIKE filter
+    if query:
+        subjects_q = subjects_q.filter(Subject.name.ilike(f"%{query}%"))
+
+    subjects = subjects_q.all()
+
+    # Serialize to JSON
+    results = [
+        {"id": s.id, "name": s.name}
+        for s in subjects
+    ]
+
+    return jsonify(subjects=results)

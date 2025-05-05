@@ -1,0 +1,65 @@
+{% extends "homebase.html" %}
+
+{% block title %}My Subjects | ProTrack{% endblock %}
+
+{% block body %}
+<div class="main-content">
+
+  <!-- exactly the same search-bar as friends -->
+  <div class="search-bar">
+    <input
+      type="text"
+      id="search-input"
+      class="form-control"
+      placeholder="Search subjects..."
+      oninput="searchSubject()"
+    >
+    <!-- reuse .friends-btn styling for a matching pill button -->
+    <a href="{{ url_for('subjects') }}" class="friends-btn">
+      Create Study Subject
+    </a>
+  </div>
+
+  <!-- reuse the friends-list wrapper -->
+  <div class="friends-list" id="subjects-list">
+    <!-- JavaScript will inject .friend-card items here -->
+  </div>
+
+</div>
+
+<script>
+function searchSubject() {
+  const q = encodeURIComponent(document.getElementById('search-input').value);
+  fetch('/search_subjects?query=' + q)
+    .then(r => r.json())
+    .then(data => {
+      const list = document.getElementById('subjects-list');
+      list.innerHTML = '';
+
+      if (!data.subjects.length) {
+        list.innerHTML = '<div class="no-data">No subjects found!</div>';
+        return;
+      }
+
+      data.subjects.forEach(s => {
+        list.innerHTML += `
+          <div class="friend-card">
+            <div class="friend-info">
+              <div class="friend-avatar"></div>
+              <div class="friend-details">
+                <div class="friend-name">${s.name}</div>
+              </div>
+            </div>
+            <button
+              class="go-btn"
+              onclick="location.href='/subject/${s.id}/add_session'"
+            >Add session</button>
+          </div>`;
+      });
+    })
+    .catch(console.error);
+}
+
+document.addEventListener('DOMContentLoaded', searchSubject);
+</script>
+{% endblock %}
