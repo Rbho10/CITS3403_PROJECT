@@ -1,0 +1,29 @@
+{% extends "homebase.html" %}
+{% block title %}{{ subject.name }} | ProTrack{% endblock %}
+
+{% block body %}
+<div class="main-content p-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>{{ subject.name }}</h2>
+    <a
+      href="{{ url_for('add_session', subject_id=subject.id) }}"
+      class="friends-btn"
+    >Add Session</a>
+  </div>
+
+  {% if sessions %}
+    <ul class="list-group">
+      {% for ses in sessions %}
+        <li class="list-group-item">
+          <strong>{{ ses.created_at.strftime('%Y-%m-%d %H:%M') }}:</strong>
+          {{ ses.description }} ({{ ses.study_duration }}min)
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="no-data">No study sessions yet. Click “Add Session” above!</div>
+  {% endif %}
+
+</div>
+{% endblock %}

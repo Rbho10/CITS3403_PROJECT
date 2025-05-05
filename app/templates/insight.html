@@ -1,0 +1,26 @@
+<!-- app/templates/insight.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Insights for {{ subject }}</title>
+</head>
+<body>
+  <h1>Insights: {{ subject }}</h1>
+
+  <!-- chart -->
+  <div>
+    <img src="{{ plot_url }}" alt="Productive Score Chart">
+  </div>
+
+  <!-- narrative insights -->
+  <div>
+    <h2>Summary</h2>
+    <ul>
+      {% for line in performance_insight %}
+        <li>{{ line }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>

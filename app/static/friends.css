@@ -123,6 +123,7 @@ body {
     color: white;
     border-radius: 6px;
     cursor: pointer;
+    text-decoration: none;
 }
 .friend-details {
     display: flex;

@@ -4,3 +4,5 @@ protrackenv/
 __pycache__/
 #Git directory
 .git/
+#Environment variables
+.env
