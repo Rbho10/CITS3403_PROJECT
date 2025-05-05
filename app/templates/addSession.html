@@ -1,0 +1,77 @@
+{% extends "homebase.html" %}
+{% block title %}Add Study Session | ProTrack{% endblock %}
+
+{% block body %}
+<div class="container my-4">
+  <h2>Add Session for “{{ subject.name }}”</h2>
+  <form method="post" action="{{ url_for('add_session', subject_id=subject.id) }}">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.description.label(class="form-label") }}
+      {{ form.description(class="form-control", rows="3") }}
+      {% for err in form.description.errors %}
+        <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        {{ form.study_duration.label(class="form-label") }}
+        {{ form.study_duration(class="form-control") }}
+        {% for err in form.study_duration.errors %}
+          <div class="text-danger">{{ err }}</div>
+        {% endfor %}
+      </div>
+      <div class="col-md-4 mb-3">
+        {{ form.break_time.label(class="form-label") }}
+        {{ form.break_time(class="form-control") }}
+        {% for err in form.break_time.errors %}
+          <div class="text-danger">{{ err }}</div>
+        {% endfor %}
+      </div>
+      <div class="col-md-4 mb-3">
+        {{ form.mood_level.label(class="form-label") }}
+        {{ form.mood_level(class="form-control") }}
+        {% for err in form.mood_level.errors %}
+          <div class="text-danger">{{ err }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="mb-3">
+      {{ form.study_environment.label(class="form-label") }}
+      {{ form.study_environment(class="form-select") }}
+    </div>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        {{ form.mental_load.label(class="form-label") }}
+        {{ form.mental_load(class="form-control") }}
+      </div>
+      <div class="col-md-4 mb-3">
+        {{ form.distractions.label(class="form-label") }}
+        {{ form.distractions(class="form-control") }}
+      </div>
+      <div class="col-md-4 mb-3">
+        {{ form.goal_progress.label(class="form-label") }}
+        {{ form.goal_progress(class="form-select") }}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        {{ form.focus_level.label(class="form-label") }}
+        {{ form.focus_level(class="form-control") }}
+      </div>
+      <div class="col-md-6 mb-3">
+        {{ form.effectiveness.label(class="form-label") }}
+        {{ form.effectiveness(class="form-control") }}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">{{ form.submit.label.text }}</button>
+    <a href="{{ url_for('view_subject', subject_id=subject.id) }}" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+</div>
+{% endblock %}

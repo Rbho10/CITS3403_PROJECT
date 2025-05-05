@@ -1,0 +1,35 @@
+{% extends "homebase.html" %}
+
+{% block title %}Create Study Subject | ProTrack{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="p-4 shadow rounded bg-white">
+        <h3 class="text-center text-primary mb-4">
+          Create a New Subject
+        </h3>
+        <form method="POST" action="{{ url_for('create_subject') }}">
+          <div class="mb-3">
+            <label for="name" class="form-label">Subject Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="form-control"
+              placeholder="Enter subject name"
+              required
+            >
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">
+              Next
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

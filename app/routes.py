@@ -7,8 +7,8 @@ from app import app
 from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
-from app.models import db, User, Friendship, Subject, SharedSubject
-from app.signup_form import SignUpForm
+from app.models import db, User, Friendship, Subject, SharedSubject, LogSession
+from app.signup_form import SignUpForm, LogSessionForm
 from app.generate_insights import generate_insights_core, _build_insight_data
 
 @app.route('/')
@@ -250,3 +250,74 @@ def search_subjects():
     ]
 
     return jsonify(subjects=results)
+
+@app.route('/create_subject', methods=['GET','POST'])
+@login_required
+def create_subject():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        if not name:
+            flash('Please enter a subject name.', 'danger')
+            return redirect(url_for('create_subject'))
+
+        # 1) create new Subject row
+        subj = Subject(name=name, user_id=current_user.id)
+        db.session.add(subj)
+        db.session.commit()
+
+        # 2) send user to the “add session” form for this new subject
+        return redirect(url_for('add_session', subject_id=subj.id))
+
+    # GET → show the plain form
+    return render_template('createSubject.html')
+
+@app.route('/subject/<int:subject_id>/add_session', methods=['GET', 'POST'])
+@login_required
+def add_session(subject_id):
+    # Ensure the subject exists and belongs to the current user
+    subject = Subject.query.filter_by(id=subject_id, user_id=current_user.id).first_or_404()
+
+    form = LogSessionForm()
+    if form.validate_on_submit():
+        log = LogSession(
+            description      = form.description.data,
+            study_duration   = form.study_duration.data,
+            break_time       = form.break_time.data or 0,
+            mood_level       = form.mood_level.data,
+            study_environment= form.study_environment.data,
+            mental_load      = form.mental_load.data,
+            distractions     = form.distractions.data,
+            goal_progress    = form.goal_progress.data,
+            focus_level      = form.focus_level.data,
+            effectiveness    = form.effectiveness.data,
+            subject_id       = subject.id,
+            user_id          = current_user.id
+        )
+        db.session.add(log)
+        db.session.commit()
+
+        flash('Study session added successfully.', 'success')
+        return redirect(url_for('view_subject', subject_id=subject.id))
+
+    return render_template(
+        'addSession.html',
+        form=form,
+        subject=subject
+    )
+
+@app.route('/subject/<int:subject_id>')
+@login_required
+def view_subject(subject_id):
+    # load the subject, or 404 if it doesn’t exist / isn’t yours
+    subject = Subject.query.filter_by(id=subject_id, user_id=current_user.id).first()
+    if subject is None:
+        abort(404)
+
+    # you can pass its log‐sessions through the relationship
+    sessions = subject.logsessions  # list of LogSession objects
+
+    return render_template(
+        'viewSubject.html',
+        subject=subject,
+        sessions=sessions
+    )

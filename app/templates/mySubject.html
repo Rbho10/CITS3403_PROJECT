@@ -15,7 +15,7 @@
       oninput="searchSubject()"
     >
     <!-- reuse .friends-btn styling for a matching pill button -->
-    <a href="{{ url_for('subjects') }}" class="friends-btn">
+    <a href="{{ url_for('create_subject') }}" class="friends-btn">
       Create Study Subject
     </a>
   </div>
@@ -50,10 +50,7 @@ function searchSubject() {
                 <div class="friend-name">${s.name}</div>
               </div>
             </div>
-            <button
-              class="go-btn"
-              onclick="location.href='/subject/${s.id}/add_session'"
-            >Add session</button>
+            <a href="/subject/${s.id}/add_session" class="go-btn">Add session</a>
           </div>`;
       });
     })
