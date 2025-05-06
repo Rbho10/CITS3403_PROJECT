@@ -35,7 +35,7 @@ Make sure `python-dotenv` is installed in your virtual environment. This will au
 3. Create an OpenAI Account via https://platform.openai.com/
 4. Follow prompts and create an API key by entering API Key Name, and enter a project name. Copy the API Key once generated.
 5. Create an empty `.env` file. 
-6. In the `.env` file, paste the line `OPENAI_API_KEY=sk-...{your api key}`. Also,create a `SECRET_KEY={your secret key}` for taking user input through flask-WTF forms. After these two variables have been inserted, save the file.
+6. In the `.env` file, paste the line `OPENAI_API_KEY=sk-...{your api key}`. Also,create a `SECRET_KEY={your secret key}` for taking user input through flask-WTF forms. After these two variables have been inserted, save the file. The `python-dotenv` that has been installed in your virtual environment will automatically treat this as environment variables of the os and will then be used in the respective python codes (i.e. generate_insights.py, addSession.html).
 7. Run the application: `flask run`. This will only work if you set up the `FLASK_APP` environment variable to point to your flask application instance.
 
 
