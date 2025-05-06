@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     # Secret key for sessions, CSRF, flash messages, etc.
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret_key'
+    SECRET_KEY = os.environ.get('SECRET_KEY') 
 
     # Database
     SQLALCHEMY_DATABASE_URI = (
