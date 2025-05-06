@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from flask import current_app, render_template, abort, url_for
 from openai import OpenAI
 
-from app.models import Subject, LogSession
+from app.models import Subject, LogSession, ApiResponse, db
 
 _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
@@ -40,8 +40,9 @@ def _build_insight_data(user_id: int, subject_name: str) -> dict:
     if not subs:
         abort(404)
     subject_ids = [s.id for s in subs]
+    subject_id  = subject_ids[0]
 
-    # 2) fetch all LogSession rows for any of those subject IDs
+    # 2) fetch sessions early to allow cache invalidation
     sessions = (
         LogSession.query
         .filter(
@@ -52,9 +53,33 @@ def _build_insight_data(user_id: int, subject_name: str) -> dict:
         .all()
     )
     if not sessions:
+        # no sessions means no plot or insight
         return {'plot_url': None, 'performance_insight': []}
 
-    # 3) Build exactly your original list-of-dicts
+    session_count = len(sessions)
+
+    # 3) precompute slug, filename, and plot_url
+    slug     = urllib.parse.quote_plus(subject_name)
+    fname    = f"{user_id}_{slug}_prod_score.png"
+    plot_url = url_for('static', filename=f'images/{fname}')
+
+    # 4) check for cached AI response and valid session_count
+    cached = ApiResponse.query.filter_by(
+        user_id=user_id,
+        subject_id=subject_id
+    ).first()
+    if cached:
+        cached_data = cached.response_data or {}
+        if cached_data.get('session_count') == session_count:
+            return {
+                'plot_url': plot_url,
+                'performance_insight': cached_data.get('performance_insight', [])
+            }
+        # session count changed => invalidate old cache
+        db.session.delete(cached)
+        db.session.commit()
+
+    # 5) Build list-of-dicts from sessions
     user_data_all = [
         {
             "user_id":               s.user_id,
@@ -73,16 +98,14 @@ def _build_insight_data(user_id: int, subject_name: str) -> dict:
         for s in sessions
     ]
 
-    # 4) Turn that into a DataFrame & compute productive_score
+    # 6) create dataframe and compute score
     df = pd.DataFrame(user_data_all)
     df['productive_score'] = df['avg_focus_level'] * df['avg_effectiveness']
     df['session_number']   = df.index + 1
 
-    # 5) Render the plot to a PNG in static/images
+    # 7) plot to PNG
     images_dir = os.path.join(current_app.static_folder, 'images')
     os.makedirs(images_dir, exist_ok=True)
-    slug  = urllib.parse.quote_plus(subject_name)
-    fname = f"{user_id}_{slug}_prod_score.png"
     out_fp = os.path.join(images_dir, fname)
 
     plt.figure()
@@ -94,7 +117,7 @@ def _build_insight_data(user_id: int, subject_name: str) -> dict:
     plt.savefig(out_fp)
     plt.close()
 
-    # 6) Compute summary insights exactly as you had them
+    # 8) compute summary insights
     mean_score = df['productive_score'].mean()
     max_score  = df['productive_score'].max()
     min_score  = df['productive_score'].min()
@@ -111,17 +134,28 @@ def _build_insight_data(user_id: int, subject_name: str) -> dict:
          else f"Even your lowest session ({worst_idx}) is close to average.")
     ]
 
-    # 7) Append AI narrative
+    # 9) append AI narrative
     narrative = call_ai_insight(
-        f"Given input {user_data_all} filtered by {user_id}'s data and the {subject_name} that is being queried in the url. Use 'you' instead of user3 person narrative"
-        "Provide insightful analysis on focus trends, peak productivity times, and areas for improvement. Don't need to be too verbose, just a few sentences." 
-        "The summary should include Daily/weekly/monthly study durations, - Subject-wise efficiency, - Personalized productivity trends" 
-        "This application motivates users by giving them clear visual feedback and enables sharing progress with peers or mentors."
+        f"Given input {user_data_all} for {subject_name}, use 'you' narrative. "
+        "Provide insightful analysis on focus trends, peak productivity times, and areas for improvement. "
+        "Just a few sentences."
     )
     performance_insight.append(narrative)
 
+    # 10) cache new response with session_count
+    new_cache = ApiResponse(
+        user_id=user_id,
+        subject_id=subject_id,
+        response_data={
+            'session_count': session_count,
+            'performance_insight': performance_insight
+        }
+    )
+    db.session.add(new_cache)
+    db.session.commit()
+
     return {
-        'plot_url': url_for('static', filename=f'images/{fname}'),
+        'plot_url': plot_url,
         'performance_insight': performance_insight
     }
 

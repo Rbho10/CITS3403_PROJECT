@@ -30,7 +30,12 @@ The code will be stored in a zip folder. Unzipping the folder will decompress th
 Steps to reproduce/run the code:
 1. Create and activate a virtual environment by running the command: `python3 -m venv protrackenv` 
 Then access the virtual environment On Mac: `source protrackenv/bin/activate` On Windows: `protrackenv\Scripts\activate`
-2. Install the dependencies by running the command: `pip install -r requirements.txt`
-3. Run the application: `flask run`
+2. Install the dependencies by running the command: `pip install -r requirements.txt`.
+Make sure `python-dotenv` is installed in your virtual environment. This will automatically load the .env file which contains your OpenAI API Key and secret key. This has been safely ignored through .gitignore file so that the key won't be exposed to the public repository.
+3. Create an OpenAI Account via https://platform.openai.com/
+4. Follow prompts and create an API key by entering API Key Name, and enter a project name. Copy the API Key once generated.
+5. Create an empty `.env` file. 
+6. In the `.env` file, paste the line `OPENAI_API_KEY=sk-...{your api key}`. Create a `SECRET_KEY={your secret key}` for taking user input through flask-WTF forms. Save the file.
+7. Run the application: `flask run`. This will only work if you set up the `FLASK_APP` environment variable pointing to your flask application instance.
 
 
