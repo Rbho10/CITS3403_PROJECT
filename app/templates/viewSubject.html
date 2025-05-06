@@ -10,6 +10,10 @@
       href="{{ url_for('add_session', subject_id=subject.id) }}"
       class="friends-btn"
     >Add Session</a>
+    <a
+    href="{{ url_for('dashboard') }}"
+    class="friends-btn"
+  >View Dashboard Insights</a>
   </div>
 
   {% if sessions %}

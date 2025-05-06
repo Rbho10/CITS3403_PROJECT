@@ -16,6 +16,8 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
 
+    api_responses = db.relationship('ApiResponse', back_populates='user', lazy='dynamic')
+
     def __repr__(self):
         return f"<User {self.id}: {self.username}>"
     
@@ -37,6 +39,7 @@ class Subject(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', backref=db.backref('subjects', lazy=True))
+    api_responses = db.relationship('ApiResponse', back_populates='subject', lazy='dynamic')
 
     def __repr__(self):
         return f"<Subject {self.id}: {self.name}>"
@@ -87,3 +90,21 @@ class LogSession(db.Model):
 
     def __repr__(self):
         return f"<LogSession {self.id} for Subject {self.subject_id} by User {self.user_id}>"
+    
+class ApiResponse(db.Model):
+    __tablename__ = 'api_responses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subjects.id'), nullable=False)
+
+    # store the full JSON payload
+    # - on SQLite this ends up as TEXT but you can still load/dump with json
+    # - if your DB supports native JSON you can use db.JSON
+    response_data = db.Column(db.JSON, nullable=False)
+
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    # optional back-refs
+    user = db.relationship('User', back_populates='api_responses')
+    subject = db.relationship('Subject', back_populates='api_responses')
