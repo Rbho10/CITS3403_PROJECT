@@ -116,7 +116,7 @@ body {
     color: #333;
 }
 
-.go-btn {
+.go-btn{
     padding: 6px 14px;
     border: none;
     background-color: #7f5af0;
@@ -125,6 +125,7 @@ body {
     cursor: pointer;
     text-decoration: none;
 }
+
 .friend-details {
     display: flex;
     flex-direction: column;
