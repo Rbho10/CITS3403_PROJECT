@@ -8,7 +8,7 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from app.models import db, User, Friendship, Subject, SharedSubject, LogSession
-from app.signup_form import SignUpForm, LogSessionForm
+from app.signup_form import SignUpForm, LogSessionForm, SettingsForm
 from app.generate_insights import generate_insights_core, _build_insight_data
 
 @app.route('/')
@@ -18,18 +18,12 @@ def welcome():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-
-        user = User.query.filter_by(username=username).first()
-
-        if user and check_password_hash(user.password, password):
+        user = User.query.filter_by(username=request.form['username']).first()
+        if user and user.check_password(request.form['password']):
             login_user(user)
             flash("Logged in successfully!", "success")
-            return redirect(url_for('dashboard'))  
-        else:
-            flash("Invalid username or password.", "danger")
-
+            return redirect(url_for('dashboard'))
+        flash("Invalid username or password.", "danger")
     return render_template("loginPage.html")
 
 @app.route('/logout')
@@ -115,39 +109,26 @@ def share_subject():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     form = SignUpForm()
-
-    if request.method == "POST" and form.validate_on_submit():
-        first_name = request.form['first_name']
-        last_name = request.form.get('last_name', '')
-        email = request.form['email']
-        username = request.form['username']
-        password = request.form['password']
-
-
-       # Check for duplicates
-        if User.query.filter_by(username=username).first():
+    if form.validate_on_submit():
+        if User.query.filter_by(username=form.username.data).first():
             flash("Username already exists.", "danger")
-            return render_template("signup.html", form=form)
-
-        if User.query.filter_by(email=email).first():
+            return render_template("accountcreationpage.html", form=form)
+        if User.query.filter_by(email=form.email.data).first():
             flash("Email already registered.", "danger")
-            return render_template("signup.html", form=form)
+            return render_template("accountcreationpage.html", form=form)
 
-        # Hash and save
-        hashed_password = generate_password_hash(password)
         new_user = User(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            username=username,
-            password=hashed_password
+            first_name=form.first_name.data,
+            last_name=form.last_name.data or '',
+            email=form.email.data,
+            username=form.username.data
         )
+        new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
 
         flash("Account created successfully. Please log in.", "success")
         return redirect(url_for('login'))
-
     return render_template("accountcreationpage.html", form=form)
 
 @app.route('/users')
@@ -321,3 +302,43 @@ def view_subject(subject_id):
         subject=subject,
         sessions=sessions
     )
+
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    form = SettingsForm()
+
+    if form.validate_on_submit():
+        # 1) verify current password
+        if not current_user.check_password(form.current_password.data):
+            flash('Incorrect password, no changes applied.', 'danger')
+            return redirect(url_for('settings'))
+
+        # 2) username/email duplicates
+        if form.username.data and form.username.data != current_user.username:
+            if User.query.filter_by(username=form.username.data).first():
+                flash('Username already taken.', 'danger')
+                return redirect(url_for('settings'))
+            current_user.username = form.username.data
+
+        if form.email.data and form.email.data != current_user.email:
+            if User.query.filter_by(email=form.email.data).first():
+                flash('Email already registered.', 'danger')
+                return redirect(url_for('settings'))
+            current_user.email = form.email.data
+
+        # 3) always update names (or leave unchanged if blank)
+        current_user.first_name = form.first_name.data or current_user.first_name
+        current_user.last_name  = form.last_name.data  or current_user.last_name
+
+        # 4) change password if they provided a new one
+        if form.new_password.data:
+            current_user.set_password(form.new_password.data)
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('settings'))
+
+    return render_template('settings.html', form=form)

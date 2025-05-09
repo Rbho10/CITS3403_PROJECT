@@ -1,0 +1,103 @@
+{% extends "homebase.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/settings.css') }}">
+{% endblock %}
+
+{% block title %}Settings | ProTrack{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h2>Account Settings</h2>
+
+  {# Flash messages #}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ msg }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('settings') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.email.label(class="form-label") }}
+      <input
+        type="email"
+        name="{{ form.email.name }}"
+        class="form-control"
+        placeholder="{{ current_user.email }}">
+      {% for err in form.email.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.username.label(class="form-label") }}
+      <input
+        type="text"
+        name="{{ form.username.name }}"
+        class="form-control"
+        placeholder="{{ current_user.username }}">
+      {% for err in form.username.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.first_name.label(class="form-label") }}
+      <input
+        type="text"
+        name="{{ form.first_name.name }}"
+        class="form-control"
+        placeholder="{{ current_user.first_name }}">
+      {% for err in form.first_name.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.last_name.label(class="form-label") }}
+      <input
+        type="text"
+        name="{{ form.last_name.name }}"
+        class="form-control"
+        placeholder="{{ current_user.last_name }}">
+      {% for err in form.last_name.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.current_password.label(class="form-label") }}
+      {{ form.current_password(class="form-control", placeholder="Current password") }}
+      {% for err in form.current_password.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.new_password.label(class="form-label") }}
+      {{ form.new_password(class="form-control", placeholder="New password") }}
+      {% for err in form.new_password.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.confirm_password.label(class="form-label") }}
+      {{ form.confirm_password(class="form-control", placeholder="Confirm new password") }}
+      {% for err in form.confirm_password.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+  </form>
+</div>
+{% endblock %}

@@ -69,3 +69,26 @@ class LogSessionForm(FlaskForm):
         validators=[DataRequired(), NumberRange(min=1, max=10)]
     )
     submit = SubmitField('Add Session')
+
+
+# form to update user settings
+class SettingsForm(FlaskForm):
+    email = StringField('Email',      validators=[Optional(), Email()])
+    username = StringField('Username', validators=[Optional()])
+    first_name = StringField('First Name', validators=[Optional()])
+    last_name  = StringField('Last Name',  validators=[Optional()])
+
+    current_password = PasswordField(
+        'Current Password',
+        validators=[InputRequired(message="Please enter your current password")]
+    )
+    new_password = PasswordField(
+        'New Password',
+        validators=[Optional(), Length(min=8, message="Must be at least 8 characters")]
+    )
+    confirm_password = PasswordField(
+        'Confirm Password',
+        validators=[EqualTo('new_password', message='Passwords must match')]
+    )
+
+    submit = SubmitField('Update')
