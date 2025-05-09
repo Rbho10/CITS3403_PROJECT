@@ -31,7 +31,7 @@
 
                 data.friends.forEach(friend => {
                     const actionButton = friend.is_friend
-                        ? `<span class="friend-added">Friend added</span>`
+                        ? `<span class="go-btn">Friend added</span>`
                         : `<button class="add-btn" onclick="addFriend(${friend.id})">Add Friend</button>`;
 
                     const card = `
