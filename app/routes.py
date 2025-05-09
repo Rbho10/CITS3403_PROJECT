@@ -8,7 +8,7 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from app.models import db, User, Friendship, Subject, SharedSubject, LogSession
-from app.signup_form import SignUpForm, LogSessionForm
+from app.signup_form import SignUpForm, LoginForm, LogSessionForm
 from app.generate_insights import generate_insights_core, _build_insight_data
 
 @app.route('/')
@@ -17,20 +17,19 @@ def welcome():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-
-        user = User.query.filter_by(username=username).first()
-
-        if user and check_password_hash(user.password, password):
+    form = LoginForm()
+    error = None
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash("Logged in successfully!", "success")
-            return redirect(url_for('dashboard'))  
+            return redirect(url_for('dashboard'))
         else:
-            flash("Invalid username or password.", "danger")
+            error = 'Invalid username or password.'
+    elif request.method == 'POST':
+        error = 'Form validation failed.'
 
-    return render_template("loginPage.html")
+    return render_template('loginPage.html', form=form, error=error)
 
 @app.route('/logout')
 def logout():
