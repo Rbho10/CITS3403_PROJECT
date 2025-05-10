@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+  /* Add top padding equal to navbar height to prevent content from being covered */
+  .content-wrapper { padding-top: 5rem; font-family: Arial, sans-serif; }
+  h2 { margin-top: 40px; }
+  .section { margin-bottom: 40px; }
+  .controls button { margin-right: 10px; }
+  #alarmList { list-style: none; padding: 0; }
+  #alarmList li { margin: 5px 0; }
+  #swDisplay, #timerDisplay { font-size: 1.5em; margin: 10px 0; }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content-wrapper container">
+  <h1>Time Tracker</h1>
+
+  <div class="section" id="stopwatch">
+    <h2>Stopwatch</h2>
+    <div id="swDisplay">00:00:00.000</div>
+    <div class="controls">
+      <button id="swStart" class="btn btn-primary">Start</button>
+      <button id="swStop" class="btn btn-secondary" disabled>Stop</button>
+      <button id="swReset" class="btn btn-secondary" disabled>Reset</button>
+    </div>
+  </div>
+
+  <div class="section" id="timer">
+    <h2>Timer</h2>
+    <div class="d-flex gap-2 align-items-center mb-2">
+      <input type="number" id="timerMinutes" placeholder="Minutes" min="0" class="form-control" style="width:100px;">
+      <input type="number" id="timerSeconds" placeholder="Seconds" min="0" max="59" class="form-control" style="width:100px;">
+    </div>
+    <div id="timerDisplay">00:00</div>
+    <div class="controls">
+      <button id="timerStart" class="btn btn-primary">Start</button>
+      <button id="timerPause" class="btn btn-secondary" disabled>Pause</button>
+      <button id="timerReset" class="btn btn-secondary" disabled>Reset</button>
+    </div>
+  </div>
+
+  <div class="section" id="alarms">
+    <h2>Alarms</h2>
+    <div class="d-flex gap-2 align-items-center mb-2">
+      <input type="time" id="alarmTime" class="form-control" style="width:150px;">
+      <button id="addAlarm" class="btn btn-primary">Add Alarm</button>
+    </div>
+    <ul id="alarmList" class="mt-3"></ul>
+  </div>
+
+  <audio id="alarmSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+</div>
+
+<!-- Script for functionality -->
+<script>
+  // Ensure DOM elements exist before binding
+  window.onload = function() {
+    // Stopwatch
+    let swInterval, swStartTime, swElapsed = 0;
+    const swDisplay = document.getElementById('swDisplay');
+    const swStart = document.getElementById('swStart');
+    const swStop = document.getElementById('swStop');
+    const swReset = document.getElementById('swReset');
+    swStart.onclick = () => {
+      swStartTime = Date.now() - swElapsed;
+      swInterval = setInterval(() => {
+        swElapsed = Date.now() - swStartTime;
+        const h = Math.floor(swElapsed/3600000);
+        const m = Math.floor((swElapsed%3600000)/60000);
+        const s = Math.floor((swElapsed%60000)/1000);
+        const ms = swElapsed%1000;
+        swDisplay.textContent =
+          `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:`+
+          `${s.toString().padStart(2,'0')}.${ms.toString().padStart(3,'0')}`;
+      },10);
+      swStart.disabled = true;
+      swStop.disabled = false;
+      swReset.disabled = false;
+    };
+    swStop.onclick = () => {
+      clearInterval(swInterval);
+      swStart.disabled = false;
+      swStop.disabled = true;
+    };
+    swReset.onclick = () => {
+      clearInterval(swInterval);
+      swElapsed = 0;
+      swDisplay.textContent = '00:00:00.000';
+      swStart.disabled = false;
+      swStop.disabled = true;
+      swReset.disabled = true;
+    };
+
+    // Timer
+    let timerInterval, timerRemaining;
+    const timerDisplay = document.getElementById('timerDisplay');
+    const tStart = document.getElementById('timerStart');
+    const tPause = document.getElementById('timerPause');
+    const tReset = document.getElementById('timerReset');
+    tStart.onclick = () => {
+      const mins = parseInt(document.getElementById('timerMinutes').value) || 0;
+      const secs = parseInt(document.getElementById('timerSeconds').value) || 0;
+      timerRemaining = (mins*60+secs)*1000;
+      if (!timerRemaining) return;
+      timerInterval = setInterval(() => {
+        timerRemaining -= 1000;
+        if (timerRemaining < 0) {
+          clearInterval(timerInterval);
+          timerDisplay.textContent = '00:00';
+          document.getElementById('alarmSound').play();
+          return;
+        }
+        const m = Math.floor(timerRemaining/60000);
+        const s = Math.floor((timerRemaining%60000)/1000);
+        timerDisplay.textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      },1000);
+      tStart.disabled = true;
+      tPause.disabled = false;
+      tReset.disabled = false;
+    };
+    tPause.onclick = () => {
+      clearInterval(timerInterval);
+      tStart.disabled = false;
+      tPause.disabled = true;
+    };
+    tReset.onclick = () => {
+      clearInterval(timerInterval);
+      timerRemaining = 0;
+      timerDisplay.textContent = '00:00';
+      tStart.disabled = false;
+      tPause.disabled = true;
+      tReset.disabled = true;
+    };
+
+    // Alarms
+    const alarmList = document.getElementById('alarmList');
+    const addAlarm = document.getElementById('addAlarm');
+    let alarms = [];
+    addAlarm.onclick = () => {
+      const time = document.getElementById('alarmTime').value;
+      if (!time || alarms.includes(time)) return;
+      alarms.push(time);
+      const li = document.createElement('li');
+      li.className = 'd-flex justify-content-between align-items-center';
+      li.innerHTML = `<span>${time}</span><button class='btn btn-sm btn-outline-danger'>Remove</button>`;
+      li.querySelector('button').onclick = () => {
+        alarms = alarms.filter(a => a!==time);
+        alarmList.removeChild(li);
+      };
+      alarmList.appendChild(li);
+    };
+    setInterval(() => {
+      const now = new Date().toTimeString().substr(0,5);
+      if (alarms.includes(now)) document.getElementById('alarmSound').play();
+    },60000);
+  };
+</script>
+{% endblock %}
