@@ -1,65 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{% block title %}ProTrack{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}ProTrack{% endblock %}</title>
 
-  <!-- Bootstrap CSS & Custom Styles -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
-  <link href="static/welcomePage.css" rel="stylesheet">
-  <link href="static/logInPage.css" rel="stylesheet">
-  <script src="static/logInFunctions.js"></script>
+    <!-- Bootstrap & Custom Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/welcomePage.css" rel="stylesheet">
+    <link href="static/logInPage.css" rel="stylesheet">
+    <script src="static/logInFunctions.js"></script>
 
-  {% block head %}{% endblock %}
+
+    {% block head %}{% endblock %}
 </head>
 
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
-    <a class="navbar-brand text-primary" href="#">📊 ProTrack</a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
+        <a class="navbar-brand text-primary" href="#">📊 ProTrack</a>
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-3">
-        <li class="nav-item"><a class="nav-link" href="#" onclick="goToDashboard()">Dashboard Insights</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Tips &amp; Trick</a></li>
-        <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Learn</a></li>
-      </ul>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-3">
+                <li class="nav-item"><a class="nav-link" href="#" onclick="goToDashboard()">Dashboard Insights</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Tips & Trick</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Learn</a></li>
+            </ul>
 
-      <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item">
-          <button class="btn btn-outline-primary me-2" onclick="goToLogin()">Log In</button>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-primary" onclick="goToSignup()">Sign Up</button>
-        </li>
-      </ul>
-    </div>
-  </nav>
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><button class="btn btn-outline-primary me-2" onclick="goToLogin()">Log In</button></li>
+                <li class="nav-item"><button class="btn btn-primary" onclick="goToSignup()">Sign Up</button></li>
+            </ul>
+        </div>
+    </nav>
 
   {% block body %}{% endblock %}
 
-  <!-- Bootstrap JS Bundle (includes Popper) -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ENjdO4Dr2bkBIFxQpeoETw24nUHwN6IqN91iXH+skvCJo3u+1Y53nY+yz4+OGp+u"
-    crossorigin="anonymous"
-  ></script>
     <!-- JS -->
     <!-- changed goToSignup() for my basic signup.html-->
     <script>
