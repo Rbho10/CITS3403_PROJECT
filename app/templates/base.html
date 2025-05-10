@@ -21,9 +21,16 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
         <a class="navbar-brand text-primary" href="#">📊 ProTrack</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="d-flex align-items-center">
+            <!-- extra “Menu” button on small screens -->
+            <button class="btn btn-outline-secondary d-lg-none"
+                    type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+              Menu
+            </button>
+          </div>
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-3">
@@ -63,6 +70,9 @@
         }
 
     </script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-…"
+          crossorigin="anonymous"></script>
 </body>
 
 </html>
