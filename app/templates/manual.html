@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Manual | ProTrack{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <h3 class="text-center text-primary mb-4">📘 ProTrack User Manual</h3>
+
+            <p class="text-muted">This guide will walk you through ProTrack’s key features and how to use them effectively.</p>
+
+            <!-- Table of Contents -->
+            <h5 class="mt-4">📑 Table of Contents</h5>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#tasks">Tasks</a></li>
+                <li><a href="#time-tracker">Time Tracker</a></li>
+                <li><a href="#insights">Insights</a></li>
+                <li><a href="#connections">Connections</a></li>
+                <li><a href="#tips">Tips and Tricks</a></li>
+                <li><a href="#learn">Learn</a></li>
+                <li><a href="#help">Getting Help</a></li>
+            </ul>
+
+            <!-- Manual Sections -->
+            <h5 id="dashboard" class="mt-5"><strong>1. Dashboard</strong></h5>
+            <p>Your personal dashboard shows insights and progress. It's your main hub for productivity.</p>
+
+            <h5 id="tasks" class="mt-4"><strong>2. Tasks</strong></h5>
+            <p>Create and manage your daily to-dos. Organize by priority and mark them when done.</p>
+            <ul>
+                <li>Click <strong>"Add Task"</strong> to create a task.</li>
+                <li>Set due dates and priorities.</li>
+                <li>Mark as <strong>Completed</strong> once done.</li>
+            </ul>
+
+            <h5 id="time-tracker" class="mt-4"><strong>3. Time Tracker</strong></h5>
+            <p>Track your time with the built-in stopwatch.</p>
+            <ul>
+                <li>Click <strong>Start</strong> to begin.</li>
+                <li>Click <strong>Stop</strong> to end tracking.</li>
+                <li>Click <strong>Reset</strong> to clear the timer.</li>
+            </ul>
+
+            <h5 id="insights" class="mt-4"><strong>4. Insights</strong></h5>
+            <p>Track trends in your productivity and adjust habits accordingly.</p>
+            <ul>
+                <li>View completion rates and time trends.</li>
+                <li>Use insights to refine your workflow.</li>
+            </ul>
+
+            <h5 id="connections" class="mt-4"><strong>5. Connections</strong></h5>
+            <p>Build your network and collaborate with others.</p>
+            <ul>
+                <li>Click <strong>Add Friend</strong> to connect.</li>
+                <li>Track others’ progress and collaborate.</li>
+            </ul>
+
+            <h5 id="tips" class="mt-4"><strong>6. Tips and Tricks</strong></h5>
+            <ul>
+                <li>Break tasks into chunks.</li>
+                <li>Track time to stay focused.</li>
+                <li>Review insights weekly.</li>
+            </ul>
+
+            <h5 id="learn" class="mt-4"><strong>7. Learn</strong></h5>
+            <p>Explore tutorials to deepen your understanding.</p>
+            <ul>
+                <li>Understand features like Tasks and Time Tracker.</li>
+                <li>Get advice on productivity and focus.</li>
+            </ul>
+
+            <h5 id="help" class="mt-4"><strong>8. Getting Help</strong></h5>
+            <p>Need assistance? Visit our Help page or contact support via <strong>Contact Us</strong>.</p>
+
+            <!-- CTA Button -->
+            <div class="text-center mt-5">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary px-4 py-2">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

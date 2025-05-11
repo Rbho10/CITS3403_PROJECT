@@ -19,6 +19,9 @@ def welcome():
 def time_tracker():
     return render_template('timeTracker.html')
 
+@app.route('/manual')
+def manual():
+    return render_template('manual.html')
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
