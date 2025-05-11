@@ -197,6 +197,9 @@ def search_friends():
 
     return jsonify(friends=results)
 
+@app.route('/insight')
+def insight():
+    return render_template('insight.html')
 
 @app.route('/add_friend', methods=['POST'])
 def add_friend():
