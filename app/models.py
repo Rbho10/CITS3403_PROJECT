@@ -26,7 +26,6 @@ class Friendship(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-<<<<<<< HEAD
 class Subjects(db.Model):
     __tablename__ = 'studySubjects'
 
@@ -38,5 +37,20 @@ class Subjects(db.Model):
     #graph_scale = db.Column(db.Integer, nullable=False)
     #privacy = db.Column(db.String(20), nullable=False)
     #opinion_toggle = db.Column(db.Boolean, default=True, nullable=False)
-=======
->>>>>>> main
+
+class Sessions(db.Model):
+    __tablename__ = 'sessions'
+
+    id  = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    subject_id = db.Column(db.Integer, db.ForeignKey('studySubjects.id'), nullable=False)
+    subject_name = db.Column(db.Integer, db.ForeignKey('studySubjects.subject_name'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    study_duration = db.Column(db.Integer, nullable=False)
+
+    study_break = db.Column(db.Integer)
+    energy_level_after = db.Column(db.Integer)
+    energy_level_before = db.Column(db.Integer)
+    difficulty = db.Column(db.Integer)
+    environment = db.Column(db.String(50))
+    progress = db.Column(db.String(50))
