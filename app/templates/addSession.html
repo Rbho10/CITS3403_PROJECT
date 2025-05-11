@@ -2,6 +2,68 @@
 
 {% block title %}Add Session | ProTrack{% endblock %}
 
+{% block head %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block body %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <form method="POST" action="{{ url_for('addSession', URLid = id, URLsubject_name = subject_name) }}" class="p-4 shadow rounded bg-white">
+                <h3 class="text-center text-primary mb-4">Add a New Session</h3>
+                {{ form.hidden_tag() }}
+                
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    {% for field_errors in form.errors.values() %}
+                        {% for error in field_errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    {{ form.date.label(class="form-label") }}
+                    {{ form.date(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.study_duration.label(class="form-label") }}
+                    {{ form.study_duration(class="form-control") }}
+                </div>
+                <!--<div class="mb-3">
+                    {{ form.study_break.label(class="form-label") }}
+                    {{ form.study_break(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.environment.label(class="form-label") }}
+                    {{ form.environment(class="form-control") }}
+                     
+                </div>
+                <div class="mb-3">
+                    {{ form.energy_level_before.label(class="form-label") }}
+                    {{ form.energy_level_before(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.energy_level_after.label(class="form-label") }}
+                    {{ form.energy_level_after(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.difficulty.label(class="form-label") }}
+                    {{ form.difficulty(class="form-control") }}
+                </div>
+                <div class="mb-3">
+                    {{ form.progress.label(class="form-label") }}
+                    {{ form.progress(class="form-control") }}
+                </div>-->
+                <div class="d-grid">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock%}

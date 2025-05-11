@@ -1,7 +1,16 @@
 {% extends "homebase.html" %}
 
-{% block title %}{{ current_user.username }} | ProTrack{% endblock %}
+{% block title %}{{ subject_name }} | ProTrack{% endblock %}
 
 {% block body %}
+<div class="main-content">
+    <div class="make-record">
+        <button onclick="location.href='/subject/{{id}}/{{subject_name}}/addSession'" class="create-subject-btn">Create Record</a>
+    </div>
+    <div class="analysis"></div>
+    <div class="records-list"></div>
+</div>
 
+<script>
+</script>
 {% endblock%}

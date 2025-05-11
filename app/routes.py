@@ -4,14 +4,12 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user
-<<<<<<< HEAD
-from app.models import db, User, Friendship, Subjects
+from app.models import db, User, Friendship, Subjects, Sessions
 from app.signup_form import SignUpForm
 from app.createStudySubject_form import CreateStudySubjectForm
-=======
+from app.createSessionForm import CreateSessionForm
 from app.models import db, User, Friendship
 from app.signup_form import SignUpForm
->>>>>>> main
 
 @app.route('/')
 def welcome():
@@ -145,7 +143,6 @@ def add_friend():
         return '', 200
     else:
         return '', 400
-<<<<<<< HEAD
 
 @app.route('/subjects')
 def subjects():
@@ -207,5 +204,48 @@ def createSubject():
         return redirect(url_for("subjects"))
 
     return render_template("createStudySubject.html", form=form)
-=======
->>>>>>> main
+
+@app.route('/subject/<int:id>/<string:subject_name>', methods=["POST","GET"])
+def loadInsight(id, subject_name):
+    id = 1
+    subject_name = "German"
+    return render_template("subject.html", id=id, subject_name=subject_name)
+
+@app.route('/subject/<int:URLid>/<string:URLsubject_name>/addSession', methods=["POST","GET"])
+def addSession(URLid, URLsubject_name):
+    URLid = URLid
+    URLsubject_name = URLsubject_name
+    user_id = current_user.id
+
+    form = CreateSessionForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        date = request.form["date"]
+        study_duration = request.form["study_duration"]
+        study_break = request.form["study_break"]
+        energy_level_before = request.form["energy_level_before"]
+        energy_level_after = request.form["energy_level_after"]
+        difficulty = request.form["difficult"]
+        environment = request.form["environment"]
+        progress = request.form["progress"]
+        
+        new_log = Sessions( 
+            user_id = user_id,
+            subject_name = URLsubject_name,
+            subject_id = URLid,
+            date=date,
+            study_duration=study_duration,
+            study_break=study_break,
+            energy_level_before=energy_level_before,
+            energy_level_after=energy_level_after,
+            difficulty=difficulty,
+            environment=environment,
+            progress=progress
+        )
+        db.session.add(new_log)
+        db.session.commit()
+
+        flash("New session created.", "success")
+        return redirect(url_for("subjects"))
+
+    return render_template("addSession.html", form=form, id=URLid, subject_name=URLsubject_name)
