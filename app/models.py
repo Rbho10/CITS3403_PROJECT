@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 db = SQLAlchemy()
+from werkzeug.security import generate_password_hash, check_password_hash
+# import werkzeug.security so we can use it to hash passwords when updating
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -16,10 +18,22 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
 
+    profile_picture = db.Column(db.String(255), nullable=True)
+
+    
+    
+
     api_responses = db.relationship('ApiResponse', back_populates='user', lazy='dynamic')
 
     def __repr__(self):
         return f"<User {self.id}: {self.username}>"
+    def set_password(self, raw_password):
+        """Hash and store a new password."""
+        self.password = generate_password_hash(raw_password)
+
+    def check_password(self, raw_password):
+        """Verify a plaintext password against the stored hash."""
+        return check_password_hash(self.password, raw_password)
     
 
 class Friendship(db.Model):

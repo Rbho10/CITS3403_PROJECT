@@ -1,0 +1,116 @@
+{% extends "homebase.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='profile-page.css') }}">
+{% endblock %}
+
+{% block title %}Profile | ProTrack{% endblock %}
+
+{% block body %}
+<div class="profile-page-container">
+
+  
+
+  <!-- Profile Picture Preview -->
+  <img
+    id="pic-preview"
+    src="{{ url_for('static', filename=current_user.profile_picture) if current_user.profile_picture else url_for('static', filename='default.jpg') }}"
+    class="profile-pic-preview"
+    alt="Profile Picture"
+  >
+
+  <!-- Begin Form -->
+  <form method="POST" action="{{ url_for('profile_page') }}" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <!-- Upload Button (NOW inside the form) -->
+    <div class="upload-btn-wrapper">
+      <button class="upload-btn" type="button">Change Photo</button>
+      {{ form.profile_picture(class="file-input") }}
+    </div>
+
+    <!-- Section: Account Info -->
+    <section class="profile-section">
+      <div class="profile-section-heading">
+        <h4>Account Information</h4>
+        <div class="profile-heading-line"></div>
+      </div>
+
+      <label class="form-label" for="email">Email</label>
+      <input type="email" name="{{ form.email.name }}" class="form-control" placeholder="{{ current_user.email }}">
+      {% for err in form.email.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+
+      <label class="form-label" for="username">Username</label>
+      <input type="text" name="{{ form.username.name }}" class="form-control" placeholder="{{ current_user.username }}">
+      {% for err in form.username.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+
+      <label class="form-label" for="first_name">First Name</label>
+      <input type="text" name="{{ form.first_name.name }}" class="form-control" placeholder="{{ current_user.first_name }}">
+      {% for err in form.first_name.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+
+      <label class="form-label" for="last_name">Last Name</label>
+      <input type="text" name="{{ form.last_name.name }}" class="form-control" placeholder="{{ current_user.last_name }}">
+      {% for err in form.last_name.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </section>
+
+    <!-- Section: Change Password -->
+    <section class="profile-section">
+      <div class="profile-section-heading">
+        <h4>Change Password</h4>
+        <div class="profile-heading-line"></div>
+      </div>
+
+      <label class="form-label" for="current_password">
+        Current Password <small class="text-muted">(only required if changing password)</small>
+      </label>
+      {{ form.current_password(class="form-control") }}
+      {% for err in form.current_password.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+
+      <label class="form-label" for="new_password">New Password</label>
+      {{ form.new_password(class="form-control") }}
+      {% for err in form.new_password.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+
+      <label class="form-label" for="confirm_password">Confirm New Password</label>
+      {{ form.confirm_password(class="form-control") }}
+      {% for err in form.confirm_password.errors %}
+        <div class="text-danger small">{{ err }}</div>
+      {% endfor %}
+    </section>
+
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+    </div>
+  </form>
+</div>
+
+<!-- Live image preview -->
+<script>
+  const input = document.querySelector('input[type="file"]');
+  const preview = document.getElementById('pic-preview');
+
+  if (input) {
+    input.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.setAttribute('src', e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+</script>
+{% endblock %}

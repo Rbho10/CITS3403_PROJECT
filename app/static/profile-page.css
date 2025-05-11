@@ -1,0 +1,179 @@
+/* === RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #e0e0e0;
+  color: #555;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* === FIXED TOP NAV === */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 80px;
+  right: 0;
+  height: 60px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  z-index: 999;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main-content {
+  margin-top: 60px;
+  overflow-y: auto;
+  height: calc(100vh - 60px);
+}
+
+/* === CONTAINER === */
+.profile-page-container {
+  max-width: 800px;
+  margin: 1.5rem auto;
+  padding: 1rem 2rem;
+  text-align: left;
+}
+
+/* === PROFILE PICTURE === */
+.profile-pic-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50% !important;
+  border: 2px solid #7f5af0;
+  box-shadow: 0 1px 3px rgba(127, 90, 240, 0.1);
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+/* === UPLOAD BUTTON === */
+.upload-btn-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto 2rem auto;
+  text-align: center;
+}
+
+.upload-btn {
+  border: 1px solid #7f5af0;
+  color: #7f5af0;
+  background-color: transparent;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+.upload-btn-wrapper input[type="file"],
+.upload-btn-wrapper .file-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* === SECTION HEADINGS === */
+.profile-section {
+  margin-bottom: 2rem;
+}
+
+.profile-section h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.6rem;
+  position: relative;
+  text-align: left;
+}
+
+.profile-section h4::after {
+  content: '';
+  display: block;
+  position: relative;
+  width: 800px;
+  max-width: 100%;
+  height: 1.5px;
+  background-color: #999;
+  margin-top: 6px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 1px;
+}
+
+/* === FORM FIELDS === */
+.profile-section .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: #666;
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  margin-bottom: 0.1rem;
+}
+
+.form-control {
+  background-color: #e0e0e0;
+  border: none;
+  border-bottom: 1px solid #bbb;
+  border-radius: 0;
+  padding: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #333;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 0.7rem;
+  text-align: left;
+}
+
+.form-control:focus {
+  border-bottom: 1.5px solid #888;
+  background-color: #e0e0e0;
+  outline: none;
+}
+
+/* === SUBMIT BUTTON === */
+.text-end {
+  text-align: right;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+button.btn-primary {
+  background: linear-gradient(135deg, #7f5af0, #a78bfa);
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 8px;
+  transition: 0.2s ease-in-out;
+  margin-top: 1rem;
+}
+
+button.btn-primary:hover {
+  background: linear-gradient(135deg, #6c4de5, #9673f7);
+  box-shadow: 0 2px 8px rgba(127, 90, 240, 0.3);
+}

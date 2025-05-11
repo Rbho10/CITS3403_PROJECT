@@ -1,4 +1,3 @@
-<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +7,22 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='friends.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='subjects.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='profile-page.css') }}">
 </head>
 <body>
 
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="profile-pic"></div>
+    <div class="profile-pic-wrapper">
+      {% set profile_pic = current_user.profile_picture if current_user.profile_picture else 'default.jpg' %}
+      <img
+        src="{{ url_for('static', filename=profile_pic) }}"
+        class="profile-pic"
+        alt="Profile Picture"
+        onclick="window.location.href='{{ url_for('profile_page') }}'"
+        title="My Profile"
+      />
+    </div>
     <div class="friend-icon"></div>
     <div class="friend-icon"></div>
     <div class="friend-icon"></div>
@@ -28,15 +37,41 @@
     <div class="top-nav">
       <div>Welcome back, {{ current_user.username }}!</div>
       <div class="top-buttons">
-        <a href= "{{ url_for('friends') }}" class="friends-btn">My Friends</a>
-        <a href="{{ url_for('subjects')}}" class="create-btn">My Subjects</a>
+        <a href="{{ url_for('friends') }}" class="friends-btn">My Friends</a>
+        <a href="{{ url_for('subjects') }}" class="create-btn">My Subjects</a>
         <a href="{{ url_for('logout') }}" class="logout-btn">Log Out</a>
       </div>
     </div>
 
-    <!-- Dynamic Page Content -->
+    {% block flashes %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="container mt-3">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    {% endblock %}
+
     {% block body %}{% endblock %}
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-ENjdO4Dr2bkBIFxQpeoZ8s4mJAfhib5yofDV+9U9zrOJpAo8Ww4qIt0UNLPMOiuo"
+          crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('click', function(e) {
+      if (e.target.matches('[data-bs-dismiss="alert"], .btn-close')) {
+        const alertEl = e.target.closest('.alert');
+        alertEl?.classList.remove('show');
+        setTimeout(() => alertEl.remove(), 150);
+      }
+    });
+  </script>
 </body>
 </html>
