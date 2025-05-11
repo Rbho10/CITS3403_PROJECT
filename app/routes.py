@@ -37,7 +37,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash("Logged in successfully!", "success")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('welcome'))
         # invalid credentials fallback
         flash("Invalid username or password.", "danger")
     # on GET, or after a failed POST, just render the form (with any flash messages)
