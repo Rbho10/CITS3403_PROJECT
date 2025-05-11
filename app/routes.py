@@ -8,7 +8,12 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from app.models import db, User, Friendship, Subject, SharedSubject, LogSession
-from app.signup_form import SignUpForm, LoginForm, LogSessionForm
+from werkzeug.utils import secure_filename
+
+
+from app.signup_form import SignUpForm, LogSessionForm, SettingsForm, LoginForm
+
+
 from app.generate_insights import generate_insights_core, _build_insight_data
 
 @app.route('/')
@@ -23,18 +28,18 @@ def time_tracker():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
-    error = None
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user and check_password_hash(user.password, form.password.data):
+        # use your model’s check_password method
+        if user and user.check_password(form.password.data):
             login_user(user)
+            flash("Logged in successfully!", "success")
             return redirect(url_for('dashboard'))
-        else:
-            error = 'Invalid username or password.'
-    elif request.method == 'POST':
-        error = 'Form validation failed.'
+        # invalid credentials fallback
+        flash("Invalid username or password.", "danger")
+    # on GET, or after a failed POST, just render the form (with any flash messages)
+    return render_template("loginPage.html", form=form)
 
-    return render_template('loginPage.html', form=form, error=error)
 
 @app.route('/logout')
 def logout():
@@ -119,39 +124,26 @@ def share_subject():
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
     form = SignUpForm()
-
-    if request.method == "POST" and form.validate_on_submit():
-        first_name = request.form['first_name']
-        last_name = request.form.get('last_name', '')
-        email = request.form['email']
-        username = request.form['username']
-        password = request.form['password']
-
-
-       # Check for duplicates
-        if User.query.filter_by(username=username).first():
+    if form.validate_on_submit():
+        if User.query.filter_by(username=form.username.data).first():
             flash("Username already exists.", "danger")
-            return render_template("signup.html", form=form)
-
-        if User.query.filter_by(email=email).first():
+            return render_template("accountcreationpage.html", form=form)
+        if User.query.filter_by(email=form.email.data).first():
             flash("Email already registered.", "danger")
-            return render_template("signup.html", form=form)
+            return render_template("accountcreationpage.html", form=form)
 
-        # Hash and save
-        hashed_password = generate_password_hash(password)
         new_user = User(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            username=username,
-            password=hashed_password
+            first_name=form.first_name.data,
+            last_name=form.last_name.data or '',
+            email=form.email.data,
+            username=form.username.data
         )
+        new_user.set_password(form.password.data)
         db.session.add(new_user)
         db.session.commit()
 
         flash("Account created successfully. Please log in.", "success")
         return redirect(url_for('login'))
-
     return render_template("accountcreationpage.html", form=form)
 
 @app.route('/users')
@@ -325,3 +317,50 @@ def view_subject(subject_id):
         subject=subject,
         sessions=sessions
     )
+
+
+
+@app.route('/profile-page', methods=['GET', 'POST'])
+@login_required
+def profile_page():
+    form = SettingsForm()
+
+    if form.validate_on_submit():
+        if form.new_password.data:
+            if not current_user.check_password(form.current_password.data):
+                flash('Incorrect current password. Password not updated.', 'danger')
+                return redirect(url_for('profile_page'))
+            current_user.set_password(form.new_password.data)
+
+        if form.username.data and form.username.data != current_user.username:
+            if User.query.filter_by(username=form.username.data).first():
+                flash('Username already taken.', 'danger')
+                return redirect(url_for('profile_page'))
+            current_user.username = form.username.data
+        if form.email.data and form.email.data != current_user.email:
+            if User.query.filter_by(email=form.email.data).first():
+                flash('Email already registered.', 'danger')
+                return redirect(url_for('profile_page'))
+            current_user.email = form.email.data
+        
+        current_user.first_name = form.first_name.data or current_user.first_name
+        current_user.last_name  = form.last_name.data  or current_user.last_name
+        file = form.profile_picture.data
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename = f"user_{current_user.id}_{filename}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print("Saving file to:", filepath)  
+            file.save(filepath)
+            current_user.profile_picture = f"uploads/{filename}"
+
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile_page'))
+
+    return render_template('profile-page.html', form=form)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']

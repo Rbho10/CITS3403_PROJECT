@@ -10,6 +10,9 @@ matplotlib.use('Agg')
 app = Flask(__name__)
 # ← load everything from your Config class
 app.config.from_object(Config)
+app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = Config.ALLOWED_EXTENSIONS
+
 
 # Initialize extensions
 db.init_app(app)
