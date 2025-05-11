@@ -6,15 +6,24 @@
 
 {% block body %}
 <div class="container py-5">
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <form method="POST" action="{{ url_for('login') }}" class="p-4 shadow rounded bg-white">
                 {{ form.hidden_tag() }}
                 <h3 class="text-center text-primary mb-4">Welcome Back</h3>
-
-                {% if error %}
-                <div class="alert alert-danger">{{ error }}</div>
-                {% endif %}
 
                 <div class="mb-3">
                     {{ form.username.label(class="form-label") }}

@@ -8,6 +8,8 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from app.models import db, User, Friendship, Subject, SharedSubject, LogSession
+from werkzeug.utils import secure_filename
+
 
 from app.signup_form import SignUpForm, LogSessionForm, SettingsForm, LoginForm
 
@@ -318,40 +320,47 @@ def view_subject(subject_id):
 
 
 
-@app.route('/settings', methods=['GET', 'POST'])
+@app.route('/profile-page', methods=['GET', 'POST'])
 @login_required
-def settings():
+def profile_page():
     form = SettingsForm()
 
     if form.validate_on_submit():
-        # 1) verify current password
-        if not current_user.check_password(form.current_password.data):
-            flash('Incorrect password, no changes applied.', 'danger')
-            return redirect(url_for('settings'))
+        if form.new_password.data:
+            if not current_user.check_password(form.current_password.data):
+                flash('Incorrect current password. Password not updated.', 'danger')
+                return redirect(url_for('profile_page'))
+            current_user.set_password(form.new_password.data)
 
-        # 2) username/email duplicates
         if form.username.data and form.username.data != current_user.username:
             if User.query.filter_by(username=form.username.data).first():
                 flash('Username already taken.', 'danger')
-                return redirect(url_for('settings'))
+                return redirect(url_for('profile_page'))
             current_user.username = form.username.data
-
         if form.email.data and form.email.data != current_user.email:
             if User.query.filter_by(email=form.email.data).first():
                 flash('Email already registered.', 'danger')
-                return redirect(url_for('settings'))
+                return redirect(url_for('profile_page'))
             current_user.email = form.email.data
-
-        # 3) always update names (or leave unchanged if blank)
+        
         current_user.first_name = form.first_name.data or current_user.first_name
         current_user.last_name  = form.last_name.data  or current_user.last_name
-
-        # 4) change password if they provided a new one
-        if form.new_password.data:
-            current_user.set_password(form.new_password.data)
+        file = form.profile_picture.data
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename = f"user_{current_user.id}_{filename}"
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            print("Saving file to:", filepath)  
+            file.save(filepath)
+            current_user.profile_picture = f"uploads/{filename}"
 
         db.session.commit()
         flash('Profile updated successfully!', 'success')
-        return redirect(url_for('settings'))
+        return redirect(url_for('profile_page'))
 
-    return render_template('settings.html', form=form)
+    return render_template('profile-page.html', form=form)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']

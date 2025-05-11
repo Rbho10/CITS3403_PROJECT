@@ -18,6 +18,8 @@ class User(UserMixin, db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
 
+    profile_picture = db.Column(db.String(255), nullable=True)
+
     
     
 

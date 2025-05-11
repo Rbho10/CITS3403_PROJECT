@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField, TextAreaField, SelectField
 from wtforms.validators import InputRequired, Email, EqualTo, DataRequired, NumberRange, Optional, Length
+from flask_wtf.file import FileField, FileAllowed
+
 
 class SignUpForm(FlaskForm):
     first_name = StringField('First Name', validators=[InputRequired()])
@@ -85,7 +87,7 @@ class SettingsForm(FlaskForm):
 
     current_password = PasswordField(
         'Current Password',
-        validators=[InputRequired(message="Please enter your current password")]
+        validators=[Optional()]
     )
     new_password = PasswordField(
         'New Password',
@@ -95,5 +97,8 @@ class SettingsForm(FlaskForm):
         'Confirm Password',
         validators=[EqualTo('new_password', message='Passwords must match')]
     )
+    profile_picture = FileField('Profile Picture', validators=[
+        FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
+    ])
 
     submit = SubmitField('Update')

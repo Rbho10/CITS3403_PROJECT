@@ -16,3 +16,7 @@ class Config:
 
     # Flask‐session behavior
     SESSION_PERMANENT = False
+
+    UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
