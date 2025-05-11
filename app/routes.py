@@ -4,9 +4,14 @@ from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user
+<<<<<<< HEAD
 from app.models import db, User, Friendship, Subjects
 from app.signup_form import SignUpForm
 from app.createStudySubject_form import CreateStudySubjectForm
+=======
+from app.models import db, User, Friendship
+from app.signup_form import SignUpForm
+>>>>>>> main
 
 @app.route('/')
 def welcome():
@@ -140,6 +145,7 @@ def add_friend():
         return '', 200
     else:
         return '', 400
+<<<<<<< HEAD
 
 @app.route('/subjects')
 def subjects():
@@ -201,3 +207,5 @@ def createSubject():
         return redirect(url_for("subjects"))
 
     return render_template("createStudySubject.html", form=form)
+=======
+>>>>>>> main

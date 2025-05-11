@@ -6,10 +6,14 @@
   <title>{% block title %}ProTrack{% endblock %}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='friends.css') }}">
+<<<<<<< HEAD
   <link rel="stylesheet" href="{{ url_for('static', filename='mySubjectsPage.css') }}">
   
   {% block head %}{% endblock %}
 
+=======
+  
+>>>>>>> main
 </head>
 <body>
 
@@ -31,7 +35,11 @@
       <div>Welcome back, {{ current_user.username }}!</div>
       <div class="top-buttons">
         <a href= "{{ url_for('friends') }}" class="friends-btn">My Friends</a>
+<<<<<<< HEAD
         <a href= "{{ url_for('subjects') }}" class="subjects-btn">My Subjects</a>
+=======
+        <div class="create-btn">My Subjects</div>
+>>>>>>> main
         <a href="{{ url_for('logout') }}" class="logout-btn">Log Out</a>
       </div>
     </div>

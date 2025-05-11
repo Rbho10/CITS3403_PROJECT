@@ -2,6 +2,7 @@
 Created javascript file
 */
 
+<<<<<<< HEAD
 function validInputs(){
     /*
     when user tries to log in with unfilled inputs raise alert
@@ -20,11 +21,14 @@ function validInputs(){
     return true;
 }
 
+=======
+>>>>>>> main
 function validAlert(){
     /*
     when user tries to log in and both/either username or password does not align with those in database
     throw alert that both/either username and/or password are incorrect
     */
+<<<<<<< HEAD
     /* 
     if (validInputs() != true){
         return false;
@@ -49,4 +53,7 @@ function validAlert(){
     }
     return true;
     */
+=======
+    alert('Either username or password are incorrect.');
+>>>>>>> main
 }

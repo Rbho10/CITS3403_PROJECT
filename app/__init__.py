@@ -2,7 +2,10 @@ from flask import Flask, jsonify
 from .models import db, User
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+<<<<<<< HEAD
 from flask_migrate import Migrate
+=======
+>>>>>>> main
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.db' #path to db file
@@ -13,8 +16,11 @@ app.config['SESSION_PERMANENT'] = False
 
 db.init_app(app) #initialize the database with the app
 
+<<<<<<< HEAD
 migrate = Migrate(app, db)
 
+=======
+>>>>>>> main
 # Setup LoginManager
 login_manager = LoginManager()
 login_manager.init_app(app)

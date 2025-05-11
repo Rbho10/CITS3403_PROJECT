@@ -60,7 +60,11 @@ body {
     align-items: center;
     gap: 1rem;
 }
+<<<<<<< HEAD
 .create-btn, .logout-btn, .friends-btn, .subjects-btn {
+=======
+.create-btn, .logout-btn, .friends-btn {
+>>>>>>> main
     padding: 8px 16px;
     border-radius: 20px;
     font-weight: bold;
