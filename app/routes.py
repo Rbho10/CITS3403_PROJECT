@@ -18,6 +18,11 @@ from app.generate_insights import generate_insights_core, _build_insight_data
 def welcome():
     return render_template('welcomePage.html')
 
+@app.route('/time-tracker')
+def time_tracker():
+    return render_template('timeTracker.html')
+
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()

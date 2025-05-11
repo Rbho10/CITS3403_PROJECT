@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -32,7 +33,8 @@
             </ul>
 
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item"><button class="btn btn-outline-primary me-2" onclick="goToLogin()">Log In</button></li>
+                <li class="nav-item"><button class="btn btn-outline-primary me-2" onclick="goToLogin()">Log In</button>
+                </li>
                 <li class="nav-item"><button class="btn btn-primary" onclick="goToSignup()">Sign Up</button></li>
             </ul>
         </div>
@@ -47,15 +49,20 @@
             window.location.href = "{{ url_for('login') }}";
         }
 
-        
+
         function goToSignup() {
             window.location.href = "{{ url_for('signup') }}";
         }
-        
+
         function goToDashboard() {
             window.location.href = "{{ url_for('dashboard') }}";
         }
 
+        function goToTimeTracker() {
+            window.location.href = "{{ url_for('time_tracker') }}";
+        }
+
     </script>
 </body>
+
 </html>
