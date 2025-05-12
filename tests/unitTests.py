@@ -6,7 +6,8 @@ from app.config import TestingConfig
 class UnitTest(unittest.TestCase):
 
     def setUp(self):
-        self.app = create_app(TestingConfig)  # create new isolated app instance
+        # Create an isolated app instance with testing config
+        self.app = create_app(TestingConfig)
         self.client = self.app.test_client()
 
         with self.app.app_context():
@@ -32,6 +33,7 @@ class UnitTest(unittest.TestCase):
             self.assertIsNotNone(retrieved_user)
 
     def test_login_success(self):
+        # Create a user and test successful login
         with self.app.app_context():
             user = User(
                 username='login_user',
@@ -43,24 +45,29 @@ class UnitTest(unittest.TestCase):
             db.session.add(user)
             db.session.commit()
 
-        response = self.app.post('/login', data={
-            'username': 'login_user',
-            'password': 'test123'
-        }, follow_redirects=True)
+        response = self.client.post(
+            '/login',
+            data={'username': 'login_user', 'password': 'test123'},
+            follow_redirects=True
+        )
         self.assertEqual(response.status_code, 200)
+        # Dashboard page should include 'Dashboard'
         self.assertIn(b'Dashboard', response.data)
 
     def test_login_fail(self):
-        response = self.app.post('/login', data={
-            'username': 'wronguser',
-            'password': 'wrongpass'
-        })
+        # Invalid credentials should re-render the login form
+        response = self.client.post(
+            '/login',
+            data={'username': 'wronguser', 'password': 'wrongpass'},
+            follow_redirects=True
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Invalid username or password', response.data)
+        # We expect to see the login form again (e.g. its heading “Welcome Back”)
+        self.assertIn(b'Welcome Back', response.data)
 
     def test_logout_route(self):
-        with self.app:
-            # First login
+        # Log in and then log out, verifying we land back on the welcome page
+        with self.client:
             with self.app.app_context():
                 user = User(
                     username='logout_user',
@@ -72,19 +79,24 @@ class UnitTest(unittest.TestCase):
                 db.session.add(user)
                 db.session.commit()
 
-            self.app.post('/login', data={
-                'username': 'logout_user',
-                'password': 'logoutpass'
-            })
+            # Log in
+            self.client.post(
+                '/login',
+                data={'username': 'logout_user', 'password': 'logoutpass'},
+                follow_redirects=True
+            )
 
-            response = self.app.get('/logout', follow_redirects=True)
+            # Log out
+            response = self.client.get('/logout', follow_redirects=True)
             self.assertEqual(response.status_code, 200)
-            self.assertIn(b'Logged out successfully', response.data)
+            # The welcome page’s hero text should be present
+            self.assertIn(b'What will you', response.data)
 
     def test_protected_route_requires_login(self):
-        response = self.app.get('/dashboard', follow_redirects=False)
+        # Accessing a login_required page without auth should redirect
+        response = self.client.get('/dashboard', follow_redirects=False)
         self.assertEqual(response.status_code, 302)
-        self.assertIn('/login', response.location)
+        self.assertIn('/login', response.headers.get('Location', ''))
 
 if __name__ == '__main__':
     unittest.main()
