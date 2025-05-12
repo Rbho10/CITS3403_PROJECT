@@ -61,7 +61,7 @@ class UnitTest(unittest.TestCase):
     def test_logout_route(self):
         with self.app:
             # First login
-            with app.app_context():
+            with self.app.app_context():
                 user = User(
                     username='logout_user',
                     email='logout@example.com',

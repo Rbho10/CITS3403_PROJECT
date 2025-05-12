@@ -361,7 +361,7 @@ def profile_page():
 
         db.session.commit()
         flash('Profile updated successfully!', 'success')
-        return redirect(url_for('profile_page'))
+        return redirect(url_for('main.profile_page'))
 
     return render_template('profile-page.html', form=form)
 
