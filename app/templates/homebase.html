@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='profile-page.css') }}">
 </head>
 <body>
-
   <!-- Sidebar -->
   <div class="sidebar">
     <div class="profile-pic-wrapper">
@@ -23,11 +22,20 @@
         title="My Profile"
       />
     </div>
-    <div class="friend-icon"></div>
-    <div class="friend-icon"></div>
-    <div class="friend-icon"></div>
-    <div class="friend-icon"></div>
-    <div class="friend-icon"></div>
+    <!-- Loop through friends -->
+    {% for friend in current_user.friends %}
+      <div class="friend-entry">
+        <img
+          src="{{ url_for('static', filename=friend.profile_picture or 'default.jpg') }}"
+          class="profile-pic"
+          alt="{{ friend.username }}"
+          title="{{ friend.username }}"
+        />
+        <span class="friend-username">{{ friend.username }}</span>
+      </div>
+    {% else %}
+      <p class="no-friends">You have no friends yet.</p>
+    {% endfor %}
   </div>
 
   <!-- Main Content Area -->

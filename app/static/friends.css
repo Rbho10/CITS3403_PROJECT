@@ -13,13 +13,17 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 80px;
+    width: 120px;
     background-color: #fff;
     border-right: 1px solid #ccc;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 1rem;
+    flex: 0 0 80px;       
+    position: relative;   
+    z-index: 10;         
+    background: #fff; 
 }
 
 .profile-pic {
@@ -44,6 +48,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 .search-bar {
     width: 100%;
     padding: 20px 2rem 10px 2rem;
@@ -61,12 +66,14 @@ body {
     border-radius: 25px;
     font-size: 1rem;
     transition: all 0.3s ease;
+    background-color: white;
 }
 
 .search-bar input:focus {
     border-color: #7f5af0;
     outline: none;
     box-shadow: 0 0 5px rgba(127, 90, 240, 0.5);
+    background-color: white;
 }
 
 .friends-btn {
@@ -75,9 +82,10 @@ body {
     color: #7f5af0;
     border-radius: 20px;
     font-weight: bold;
-    cursor: pointer; 
+    cursor: pointer;
     text-decoration: none;
 }
+
 .friends-btn:hover {
     background-color: #7f5af0;
     color: #fff;
@@ -116,7 +124,7 @@ body {
     color: #333;
 }
 
-.go-btn{
+.go-btn {
     padding: 6px 14px;
     border: none;
     background-color: #7f5af0;
@@ -132,11 +140,43 @@ body {
 }
 
 .friend-meta {
-font-size: 0.85rem;
-color: #555;
-margin-top: 2px;
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 2px;
 }
 
+.friend-entry {
+    display: flex;
+    flex-direction: column;  /* stack vertically */
+    align-items: center;     /* center horizontally */
+    margin: 0.5rem 0;
+    cursor: pointer;
+    width: 100%;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    transition: background .2s;
+  }
+  
+  .friend-entry:hover {
+    background: rgba(126, 168, 240, 0.05);
+  }
+  
+  .friend-entry .profile-pic {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+    /* remove the old margin-right */
+    margin: 0;
+  }
+  
+  .friend-username {
+    margin-top: 0.4rem;   /* space below the pic */
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+  }
+  
 .add-friend-card {
     background-color: #fff;
     padding: 1rem;
