@@ -4,6 +4,12 @@ db = SQLAlchemy()
 from werkzeug.security import generate_password_hash, check_password_hash
 # import werkzeug.security so we can use it to hash passwords when updating
 
+class Friendship(db.Model):
+    __tablename__ = 'friendships'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
@@ -20,7 +26,14 @@ class User(UserMixin, db.Model):
 
     profile_picture = db.Column(db.String(255), nullable=True)
 
-    
+    # self-referencing many-to-many
+    friends = db.relationship(
+      'User',
+      secondary='friendships',
+      primaryjoin=(Friendship.user_id   == id),
+      secondaryjoin=(Friendship.friend_id == id),
+      backref='friended_by'
+    )
     
 
     api_responses = db.relationship('ApiResponse', back_populates='user', lazy='dynamic')
@@ -35,13 +48,6 @@ class User(UserMixin, db.Model):
         """Verify a plaintext password against the stored hash."""
         return check_password_hash(self.password, raw_password)
     
-
-class Friendship(db.Model):
-    __tablename__ = 'friendships'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    friend_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
 class Subject(db.Model):
     __tablename__ = 'subjects'
     __table_args__ = (

@@ -47,6 +47,9 @@ def logout():
     flash("Logged out successfully!", "success")
     return redirect(url_for('welcome'))
 
+@app.route('/user-manual')
+def manual():
+    return render_template('manual.html')
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -196,6 +199,7 @@ def search_friends():
 
 
 @app.route('/add_friend', methods=['POST'])
+@login_required
 def add_friend():
     data = request.get_json()
     friend_id = data['friend_id']
@@ -203,8 +207,9 @@ def add_friend():
 
     existing = Friendship.query.filter_by(user_id=user_id, friend_id=friend_id).first()
     if not existing:
-        friendship = Friendship(user_id=user_id, friend_id=friend_id)
-        db.session.add(friendship)
+        fwd = Friendship(user_id=user_id,   friend_id=friend_id)
+        rev = Friendship(user_id=friend_id, friend_id=user_id)
+        db.session.add_all([fwd, rev])
         db.session.commit()
         return '', 200
     else:

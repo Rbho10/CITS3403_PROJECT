@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_login import LoginManager
 from flask_migrate import Migrate
 
-from .models import db, User
+from .models import db, User, Friendship
 from app.config import Config
 import matplotlib
 matplotlib.use('Agg')

@@ -18,7 +18,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
-        <a class="navbar-brand text-primary" href="#">📊 ProTrack</a>
+        <a class="navbar-brand text-primary" href="{{ url_for('welcome') }}">📊 ProTrack</a>
         <div class="d-flex align-items-center">
             <!-- extra “Menu” button on small screens -->
             <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="collapse"
@@ -32,7 +32,7 @@
             <ul class="navbar-nav ms-3">
                 <li class="nav-item"><a class="nav-link" href="#" onclick="goToDashboard()">Dashboard Insights</a></li>
                 <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Tips & Trick</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" onclick="goToLogin()">Learn</a></li>
+                <li class="nav-item"><a class="nav-link" href="#" onclick="goToManual()">Learn</a></li>
             </ul>
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item"><button class="btn btn-outline-primary me-2" onclick="goToLogin()">Log In</button>
@@ -47,6 +47,9 @@
 
     <!-- Navigation JS -->
     <script>
+        function goToManual() {
+            window.location.href = "{{ url_for('manual') }}";
+        }
         function goToLogin() {
             window.location.href = "{{ url_for('login') }}";
         }
