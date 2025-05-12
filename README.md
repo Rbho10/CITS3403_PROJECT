@@ -31,7 +31,7 @@ Steps to reproduce/run the code:
 1. Create and activate a virtual environment by running the command: `python3 -m venv protrackenv` 
 Then access the virtual environment On Mac: `source protrackenv/bin/activate` On Windows: `protrackenv\Scripts\activate`
 2. Install the dependencies by running the command: `pip install -r requirements.txt`.
-3. Set up the flask environment by `export FLASK_APP=app` to run the flask app instance later.
+3. Set up the flask environment by `export FLASK_APP=run:app` to run the flask app instance later.
 Make sure `python-dotenv` is installed in your virtual environment. This will automatically load the .env file which contains your OpenAI API Key and secret key. This has been safely ignored through .gitignore file so that the key won't be exposed to the public repository.
 4. Create an OpenAI Account via https://platform.openai.com/
 5. Follow prompts and create an API key by entering API Key Name, and enter a project name. Copy the API Key once generated.
