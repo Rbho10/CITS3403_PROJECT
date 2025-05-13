@@ -39,4 +39,9 @@ Make sure `python-dotenv` is installed in your virtual environment. This will au
 8. In the `.env` file, paste the line `OPENAI_API_KEY=sk-...{your api key}`. Also,create a `SECRET_KEY={your secret key}` for taking user input through flask-WTF forms. After these two variables have been inserted, save the file. The `python-dotenv` that has been installed in your virtual environment will automatically treat this as environment variables of the os and will then be used in the respective python codes (i.e. generate_insights.py, addSession.html).
 9. Run the application: `flask run`. This will only work if you set up the `FLASK_APP` environment variable to point to your flask application instance.
 
+**Testing 5 Unit Tests and 5 Selenium Tests.**
+Make sure that the flask environment is set to `export FLASK_ENV=testing` for this testing purpose.
+For unit tests, run the command `python3 -m unittest tests/unitTests.py`
+For Selenium tests, run the command `python -m unittest tests.selenium_tests.SeleniumTests`
+
 
