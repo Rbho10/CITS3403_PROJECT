@@ -13,7 +13,7 @@ The dashboard highlights:
 - Subject-wise efficiency
 - Personalized productivity trends
 
-This application motivates users by giving them clear visual feedback using OpenAI API integration tool and enables sharing progress with peers or mentors. Simply click **My Friends** to add and view friends, or use My Subjects to create new subjects and log productivity sessions for each one. Once done, either view your updated dashboard insights or add another session if there's more you want to track. To share your insights with other ProTrack members, click the arrow icon in the top-right corner of any visualization container.
+This application motivates users by giving them clear visual feedback using OpenAI API integration tool and enables sharing progress with peers or mentors. Simply click **My Friends** to add and view friends, or use **My Subjects** to create new subjects and log productivity sessions for each one. Once done, either view your updated dashboard insights or add another session if there's more you want to track. To share your insights with other ProTrack members, click the arrow icon in the top-right corner of any visualisation container.
 
 
 | UWA ID     | Name          | GitHub Username   |
