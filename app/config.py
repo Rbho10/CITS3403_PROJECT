@@ -6,11 +6,6 @@ class Config:
     # Secret key for sessions, CSRF, flash messages, etc.
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
-    # Database
-    SQLALCHEMY_DATABASE_URI = (
-        os.environ.get('DATABASE_URL')
-        or 'sqlite:///' + os.path.join(basedir, 'user.db')
-    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
 
@@ -20,3 +15,11 @@ class Config:
     UPLOAD_FOLDER = os.path.join(basedir, 'static', 'uploads')
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
+class DevelopmentConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'user.db')
+
+class TestingConfig(Config):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SECRET_KEY = 'test-secret-key'
+    TESTING = True
+    WTF_CSRF_ENABLED = False  # disable CSRF for all WTForms

@@ -1,9 +1,8 @@
 import os
 import openai
-from flask import render_template, redirect, url_for, flash, request, abort
+from flask import current_app, Blueprint, render_template, redirect, url_for, flash, request, abort
 from flask_login import login_required, current_user, login_user, logout_user
 from app.generate_insights import generate_insights_core
-from app import app
 from flask import request, jsonify, session
 from werkzeug.security import generate_password_hash
 from werkzeug.security import check_password_hash
@@ -16,16 +15,17 @@ from app.signup_form import SignUpForm, LogSessionForm, SettingsForm, LoginForm
 
 from app.generate_insights import generate_insights_core, _build_insight_data
 
-@app.route('/')
+main_bp = Blueprint('main', __name__)
+@main_bp.route('/')
 def welcome():
     return render_template('welcomePage.html')
 
-@app.route('/time-tracker')
+@main_bp.route('/time-tracker')
 def time_tracker():
     return render_template('timeTracker.html')
 
 
-@app.route('/login', methods=["GET", "POST"])
+@main_bp.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -34,23 +34,23 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash("Logged in successfully!", "success")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('main.dashboard'))
         # invalid credentials fallback
         flash("Invalid username or password.", "danger")
     # on GET, or after a failed POST, just render the form (with any flash messages)
     return render_template("loginPage.html", form=form)
 
 
-@app.route('/logout')
+@main_bp.route('/logout')
 def logout():
     logout_user()
     flash("Logged out successfully!", "success")
-    return redirect(url_for('welcome'))
+    return redirect(url_for('main.welcome'))
 
-@app.route('/user-manual')
+@main_bp.route('/user-manual')
 def manual():
     return render_template('manual.html')
-@app.route('/dashboard')
+@main_bp.route('/dashboard')
 @login_required
 def dashboard():
     # —— OWNED SUBJECTS ——
@@ -93,7 +93,7 @@ def dashboard():
         share_users=share_users
     
     )
-@app.route('/share_subject', methods=['POST'])
+@main_bp.route('/share_subject', methods=['POST'])
 @login_required
 def share_subject():
     data = request.get_json() or {}
@@ -124,7 +124,7 @@ def share_subject():
     db.session.commit()
     return jsonify(status='ok')
 
-@app.route('/signup', methods=["GET", "POST"])
+@main_bp.route('/signup', methods=["GET", "POST"])
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
@@ -146,19 +146,19 @@ def signup():
         db.session.commit()
 
         flash("Account created successfully. Please log in.", "success")
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     return render_template("accountcreationpage.html", form=form)
 
-@app.route('/users')
+@main_bp.route('/users')
 def show_users():
     users = User.query.all()
     return "<br>".join([f"{u.id}: {u.username} - {u.email} - {u.first_name} - {u.created_at}" for u in users])
 
-@app.route('/friends')
+@main_bp.route('/friends')
 def friends():
     return render_template("friends.html")
 
-@app.route('/search_friends')
+@main_bp.route('/search_friends')
 def search_friends():
     query = request.args.get('query', '')
 
@@ -198,7 +198,7 @@ def search_friends():
     return jsonify(friends=results)
 
 
-@app.route('/add_friend', methods=['POST'])
+@main_bp.route('/add_friend', methods=['POST'])
 @login_required
 def add_friend():
     data = request.get_json()
@@ -215,7 +215,7 @@ def add_friend():
     else:
         return '', 
 
-@app.route('/insights/<int:user_id>/<path:subject>')
+@main_bp.route('/insights/<int:user_id>/<path:subject>')
 @login_required
 def insights(user_id, subject):
     # 1) permission: only yourself (or add sharing logic here)
@@ -225,11 +225,11 @@ def insights(user_id, subject):
     # 2) hand off to the core generator
     return generate_insights_core(user_id, subject)
 
-@app.route('/subjects')
+@main_bp.route('/subjects')
 def subjects():
     return render_template("mySubject.html")
 
-@app.route('/search_subjects')
+@main_bp.route('/search_subjects')
 @login_required
 def search_subjects():
     query = request.args.get('query', '').strip()
@@ -252,14 +252,14 @@ def search_subjects():
 
     return jsonify(subjects=results)
 
-@app.route('/create_subject', methods=['GET','POST'])
+@main_bp.route('/create_subject', methods=['GET','POST'])
 @login_required
 def create_subject():
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
         if not name:
             flash('Please enter a subject name.', 'danger')
-            return redirect(url_for('create_subject'))
+            return redirect(url_for('main.create_subject'))
 
         # 1) create new Subject row
         subj = Subject(name=name, user_id=current_user.id)
@@ -267,12 +267,12 @@ def create_subject():
         db.session.commit()
 
         # 2) send user to the “add session” form for this new subject
-        return redirect(url_for('add_session', subject_id=subj.id))
+        return redirect(url_for('main.add_session', subject_id=subj.id))
 
     # GET → show the plain form
     return render_template('createSubject.html')
 
-@app.route('/subject/<int:subject_id>/add_session', methods=['GET', 'POST'])
+@main_bp.route('/subject/<int:subject_id>/add_session', methods=['GET', 'POST'])
 @login_required
 def add_session(subject_id):
     # Ensure the subject exists and belongs to the current user
@@ -298,7 +298,7 @@ def add_session(subject_id):
         db.session.commit()
 
         flash('Study session added successfully.', 'success')
-        return redirect(url_for('view_subject', subject_id=subject.id))
+        return redirect(url_for('main.view_subject', subject_id=subject.id))
 
     return render_template(
         'addSession.html',
@@ -306,7 +306,7 @@ def add_session(subject_id):
         subject=subject
     )
 
-@app.route('/subject/<int:subject_id>')
+@main_bp.route('/subject/<int:subject_id>')
 @login_required
 def view_subject(subject_id):
     # load the subject, or 404 if it doesn’t exist / isn’t yours
@@ -325,7 +325,7 @@ def view_subject(subject_id):
 
 
 
-@app.route('/profile-page', methods=['GET', 'POST'])
+@main_bp.route('/profile-page', methods=['GET', 'POST'])
 @login_required
 def profile_page():
     form = SettingsForm()
@@ -334,18 +334,18 @@ def profile_page():
         if form.new_password.data:
             if not current_user.check_password(form.current_password.data):
                 flash('Incorrect current password. Password not updated.', 'danger')
-                return redirect(url_for('profile_page'))
+                return redirect(url_for('main.profile_page'))
             current_user.set_password(form.new_password.data)
 
         if form.username.data and form.username.data != current_user.username:
             if User.query.filter_by(username=form.username.data).first():
                 flash('Username already taken.', 'danger')
-                return redirect(url_for('profile_page'))
+                return redirect(url_for('main.profile_page'))
             current_user.username = form.username.data
         if form.email.data and form.email.data != current_user.email:
             if User.query.filter_by(email=form.email.data).first():
                 flash('Email already registered.', 'danger')
-                return redirect(url_for('profile_page'))
+                return redirect(url_for('main.profile_page'))
             current_user.email = form.email.data
         
         current_user.first_name = form.first_name.data or current_user.first_name
@@ -354,18 +354,18 @@ def profile_page():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             filename = f"user_{current_user.id}_{filename}"
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             print("Saving file to:", filepath)  
             file.save(filepath)
             current_user.profile_picture = f"uploads/{filename}"
 
         db.session.commit()
         flash('Profile updated successfully!', 'success')
-        return redirect(url_for('profile_page'))
+        return redirect(url_for('main.profile_page'))
 
     return render_template('profile-page.html', form=form)
 
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']

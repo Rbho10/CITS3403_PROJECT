@@ -7,11 +7,11 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>{{ subject.name }}</h2>
     <a
-      href="{{ url_for('add_session', subject_id=subject.id) }}"
+      href="{{ url_for('main.add_session', subject_id=subject.id) }}"
       class="friends-btn"
     >Add Session</a>
     <a
-    href="{{ url_for('dashboard') }}"
+    href="{{ url_for('main.dashboard') }}"
     class="friends-btn"
   >View Dashboard Insights</a>
   </div>

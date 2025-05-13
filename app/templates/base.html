@@ -18,7 +18,7 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-4">
-        <a class="navbar-brand text-primary" href="{{ url_for('welcome') }}">📊 ProTrack</a>
+        <a class="navbar-brand text-primary" href="{{ url_for('main.welcome') }}">📊 ProTrack</a>
         <div class="d-flex align-items-center">
             <!-- extra “Menu” button on small screens -->
             <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="collapse"
@@ -48,19 +48,19 @@
     <!-- Navigation JS -->
     <script>
         function goToManual() {
-            window.location.href = "{{ url_for('manual') }}";
+            window.location.href = "{{ url_for('main.manual') }}";
         }
         function goToLogin() {
-            window.location.href = "{{ url_for('login') }}";
+            window.location.href = "{{ url_for('main.login') }}";
         }
         function goToSignup() {
-            window.location.href = "{{ url_for('signup') }}";
+            window.location.href = "{{ url_for('main.signup') }}";
         }
         function goToDashboard() {
-            window.location.href = "{{ url_for('dashboard') }}";
+            window.location.href = "{{ url_for('main.dashboard') }}";
         }
         function goToTimeTracker() {
-            window.location.href = "{{ url_for('time_tracker') }}";
+            window.location.href = "{{ url_for('main.time_tracker') }}";
         }
     </script>
 

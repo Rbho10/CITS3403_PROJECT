@@ -18,7 +18,7 @@
         src="{{ url_for('static', filename=profile_pic) }}"
         class="profile-pic"
         alt="Profile Picture"
-        onclick="window.location.href='{{ url_for('profile_page') }}'"
+        onclick="window.location.href='{{ url_for('main.profile_page') }}'"
         title="My Profile"
       />
     </div>
@@ -45,9 +45,9 @@
     <div class="top-nav">
       <div>Welcome back, {{ current_user.username }}!</div>
       <div class="top-buttons">
-        <a href="{{ url_for('friends') }}" class="friends-btn">My Friends</a>
-        <a href="{{ url_for('subjects') }}" class="create-btn">My Subjects</a>
-        <a href="{{ url_for('logout') }}" class="logout-btn">Log Out</a>
+        <a href="{{ url_for('main.friends') }}" class="friends-btn">My Friends</a>
+        <a href="{{ url_for('main.subjects') }}" class="create-btn">My Subjects</a>
+        <a href="{{ url_for('main.logout') }}" class="logout-btn">Log Out</a>
       </div>
     </div>
 

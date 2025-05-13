@@ -1,310 +1,310 @@
 /* ==========================
    Global & Reset
    ========================== */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-}
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-
-/* ==========================
-     Sidebar
+   * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  
+  /* ==========================
+       Sidebar
+       ========================== */
+  .sidebar {
+    width: 80px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1rem;
+    flex: 0 0 80px;     /* fixed 80px width (or whatever your design calls for) */
+    background: #fff; 
+  }
+  
+  
+  .profile-pic {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #7f5af0;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  
+  
+  .friend-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #e0ecff;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+  
+  /* ==========================
+       Main Content & Layout
+  ========================== */
+  .main-content {
+    flex: 1 1 auto;     /* grow to fill remaining space */
+    min-width: 0;       /* crucial in Chrome to prevent overflow on flex children */
+    background: #fff;   /* your white panel */
+    overflow-y: auto;   /* keep your scrolling */
+  }
+  /* --------------------------
+       Top Navigation
+       -------------------------- */
+  .top-nav {
+    height: 60px;
+    background: linear-gradient(90deg, #7f5af0, #00c6ff);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    font-size: 1.2rem;
+  }
+  
+  .top-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .create-btn,
+  .logout-btn,
+  .friends-btn {
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  /* Create Subject Button */
+  .create-btn {
+    background-color: #fff;
+    color: #7f5af0;
+  }
+  
+  .create-btn:hover {
+    background-color: #7f5af0;
+    color: #fff;
+  }
+  
+  /* Logout Button */
+  .logout-btn {
+    background-color: #fff;
+    color: #7f5af0;
+    border-color: #7f5af0;
+    text-decoration: none;
+  }
+  
+  .logout-btn:hover {
+    background-color: #7f5af0;
+    color: #fff;
+  }
+  
+  /* ==========================
+       Dashboard Body
+       ========================== */
+  .dashboard-body {
+    padding: 2rem;
+    overflow-y: auto;
+    background-color: white;
+  }
+  
+  /* --------------------------
+       Subject Card
+       -------------------------- */
+  .subject-card {
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  
+  .graph-box {
+    width: 120px;
+    height: 100px;
+    background-color: #ffefc2;
+    border-radius: 8px;
+    margin-right: 1.5rem;
+  }
+  
+  .subject-info {
+    flex: 1;
+    background-color: #e5d8ff;
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  
+  .subject-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subject-insight {
+    font-size: 0.95rem;
+    color: #444;
+  }
+  
+  /* --------------------------
+       No Data State
+       -------------------------- */
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: white;
+    font-style: italic;
+  }
+  
+  /* thumbnail container */
+  .graph-box {
+    position: relative;
+    /* ← ensure the box is the positioning context */
+    display: inline-block;
+    background-color: #ffefc2;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-right: 1.5rem;
+  }
+  
+  .graph-box img,
+  .graph-box canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .graph-box .expand-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* insight box: cap height, hide overflow */
+  /* ==========================
+     Insight Text & “More…” Button
      ========================== */
-.sidebar {
-  width: 80px;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 1rem;
-  flex: 0 0 80px;     /* fixed 80px width (or whatever your design calls for) */
-  background: #fff; 
-}
-
-
-.profile-pic {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid #7f5af0;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-
-.friend-icon {
-  width: 40px;
-  height: 40px;
-  background-color: #e0ecff;
-  border-radius: 10px;
-  margin-bottom: 1rem;
-}
-
-/* ==========================
-     Main Content & Layout
-========================== */
-.main-content {
-  flex: 1 1 auto;     /* grow to fill remaining space */
-  min-width: 0;       /* crucial in Chrome to prevent overflow on flex children */
-  background: #fff;   /* your white panel */
-  overflow-y: auto;   /* keep your scrolling */
-}
-/* --------------------------
-     Top Navigation
-     -------------------------- */
-.top-nav {
-  height: 60px;
-  background: linear-gradient(90deg, #7f5af0, #00c6ff);
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  font-size: 1.2rem;
-}
-
-.top-buttons {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.create-btn,
-.logout-btn,
-.friends-btn {
-  text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: bold;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-/* Create Subject Button */
-.create-btn {
-  background-color: #fff;
-  color: #7f5af0;
-}
-
-.create-btn:hover {
-  background-color: #7f5af0;
-  color: #fff;
-}
-
-/* Logout Button */
-.logout-btn {
-  background-color: #fff;
-  color: #7f5af0;
-  border-color: #7f5af0;
-  text-decoration: none;
-}
-
-.logout-btn:hover {
-  background-color: #7f5af0;
-  color: #fff;
-}
-
-/* ==========================
-     Dashboard Body
-     ========================== */
-.dashboard-body {
-  padding: 2rem;
-  overflow-y: auto;
-  background-color: white;
-}
-
-/* --------------------------
-     Subject Card
-     -------------------------- */
-.subject-card {
-  background-color: #fff;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.graph-box {
-  width: 120px;
-  height: 100px;
-  background-color: #ffefc2;
-  border-radius: 8px;
-  margin-right: 1.5rem;
-}
-
-.subject-info {
-  flex: 1;
-  background-color: #e5d8ff;
-  border-radius: 10px;
-  padding: 1rem;
-}
-
-.subject-title {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.subject-insight {
-  font-size: 0.95rem;
-  color: #444;
-}
-
-/* --------------------------
-     No Data State
-     -------------------------- */
-.no-data {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  color: white;
-  font-style: italic;
-}
-
-/* thumbnail container */
-.graph-box {
-  position: relative;
-  /* ← ensure the box is the positioning context */
-  display: inline-block;
-  background-color: #ffefc2;
-  border-radius: 8px;
-  padding: 0.5rem;
-  margin-right: 1.5rem;
-}
-
-.graph-box img,
-.graph-box canvas {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
-.graph-box .expand-btn {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 14px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-/* insight box: cap height, hide overflow */
-/* ==========================
-   Insight Text & “More…” Button
-   ========================== */
-.subject-insight {
-  position: relative;
-  max-height: 4.8em;
-  /* ~3 lines */
-  overflow: hidden;
-  padding-bottom: 2em;
-  /* ← reserve space for the button */
-  transition: max-height 0.3s ease;
-}
-
-.subject-insight.expanded {
-  max-height: none;
-}
-
-.subject-insight p:last-child {
-  margin-bottom: 0;
-  /* no extra gap below last line */
-}
-
-/* place the button at the bottom-right, in the reserved space */
-.expand-insights {
-  position: absolute;
-  bottom: 0.5rem;
-  /* sits inside that 2em padding */
-  right: 0.5rem;
-  background: #7f5af0;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 0.25em 0.5em;
-  font-size: 0.85rem;
-  cursor: pointer;
-  z-index: 1;
-}
-
-/* position the share button in the title bar */
-.subject-title {
-  position: relative;
-}
-
-.share-btn {
-  position: absolute;
-  top: 0;
-  right: -2rem;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-/* hidden by default */
-.share-panel {
-  position: fixed !important;      /* relative to viewport, not .main-content */
-  top: 60px !important;            /* push it down just below your top-nav */
-  right: 16px !important;          /* gutter from the right edge */
-  width: 220px;
-  max-height: calc(100vh - 80px);  /* leave space above & below */
-  overflow-y: auto;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  z-index: 9999 !important;        /* well above everything else */
-  display: none;                   /* hidden until toggled */
-}
-
-/* Close “×” button */
-.share-close {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  background: none;
-  border: none;
-  font-size: 1.4rem;
-  line-height: 1;
-  cursor: pointer;
-  color: #444;
-  z-index: 10000;   /* above the panel’s own content */
-}
-.share-close:hover {
-  color: #000;
-}
-/* Tidy up the list */
-.share-list {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 0;
-}
-.share-list li {
-  padding: 0.4rem 0.6rem;
-  cursor: pointer;
-}
-.share-list li:hover {
-  background: rgba(0,0,0,0.05);
-}
+  .subject-insight {
+    position: relative;
+    max-height: 4.8em;
+    /* ~3 lines */
+    overflow: hidden;
+    padding-bottom: 2em;
+    /* ← reserve space for the button */
+    transition: max-height 0.3s ease;
+  }
+  
+  .subject-insight.expanded {
+    max-height: none;
+  }
+  
+  .subject-insight p:last-child {
+    margin-bottom: 0;
+    /* no extra gap below last line */
+  }
+  
+  /* place the button at the bottom-right, in the reserved space */
+  .expand-insights {
+    position: absolute;
+    bottom: 0.5rem;
+    /* sits inside that 2em padding */
+    right: 0.5rem;
+    background: #7f5af0;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.25em 0.5em;
+    font-size: 0.85rem;
+    cursor: pointer;
+    z-index: 1;
+  }
+  
+  /* position the share button in the title bar */
+  .subject-title {
+    position: relative;
+  }
+  
+  .share-btn {
+    position: absolute;
+    top: 0;
+    right: -2rem;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  /* hidden by default */
+  .share-panel {
+    position: fixed !important;      /* relative to viewport, not .main-content */
+    top: 60px !important;            /* push it down just below your top-nav */
+    right: 16px !important;          /* gutter from the right edge */
+    width: 220px;
+    max-height: calc(100vh - 80px);  /* leave space above & below */
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 9999 !important;        /* well above everything else */
+    display: none;                   /* hidden until toggled */
+  }
+  
+  /* Close “×” button */
+  .share-close {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #444;
+    z-index: 10000;   /* above the panel’s own content */
+  }
+  .share-close:hover {
+    color: #000;
+  }
+  /* Tidy up the list */
+  .share-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+  }
+  .share-list li {
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+  }
+  .share-list li:hover {
+    background: rgba(0,0,0,0.05);
+  }

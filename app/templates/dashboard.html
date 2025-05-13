@@ -136,7 +136,7 @@
   }
 
   function shareToUser(subjectId, targetUserId) {
-    fetch("{{ url_for('share_subject') }}", {
+    fetch("{{ url_for('main.share_subject') }}", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ subject_id: subjectId, target_user_id: targetUserId })

@@ -1,29 +1,40 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
-
+from dotenv import load_dotenv
+import os
 from .models import db, User, Friendship
 from app.config import Config
 import matplotlib
+
 matplotlib.use('Agg')
 
-app = Flask(__name__)
-# ← load everything from your Config class
-app.config.from_object(Config)
-app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
-app.config['ALLOWED_EXTENSIONS'] = Config.ALLOWED_EXTENSIONS
+# Load environment variables from .env file
+load_dotenv()
 
+def create_app(config_class=Config):
+    app = Flask(__name__)
 
-# Initialize extensions
-db.init_app(app)
-migrate = Migrate(app, db)
+    # Load configurations
+    app.config.from_object(config_class)
+    from app.routes import main_bp
+    app.register_blueprint(main_bp)
+    app.config['UPLOAD_FOLDER'] = config_class.UPLOAD_FOLDER
+    app.config['ALLOWED_EXTENSIONS'] = config_class.ALLOWED_EXTENSIONS
 
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+    # Initialize Flask extensions
+    db.init_app(app)
+    migrate = Migrate(app, db)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'main.login'
 
-# import your routes so ‘app’ and ‘db’ are in scope
-from . import routes
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    # Import routes within the application context
+    with app.app_context():
+        from . import routes
+
+    return app
