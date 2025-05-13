@@ -79,6 +79,25 @@ class SeleniumTests(unittest.TestCase):
             EC.url_contains("/dashboard")
         )
 
+    def test_00_signup_creates_account(self):
+        # sign up a fresh user and verify redirection to login
+        new_username = "new_user"
+        driver = self.driver
+        driver.get("http://127.0.0.1:5000/signup")
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.NAME, "first_name"))
+        )
+        driver.find_element(By.NAME, "first_name").send_keys("New")
+        driver.find_element(By.NAME, "last_name").send_keys("User")
+        driver.find_element(By.NAME, "email").send_keys("newuser@example.com")
+        driver.find_element(By.NAME, "username").send_keys(new_username)
+        driver.find_element(By.NAME, "password").send_keys("new_pass")
+        driver.find_element(By.NAME, "confirm").send_keys("new_pass")
+        driver.find_element(By.TAG_NAME, "form").submit()
+        WebDriverWait(driver, 5).until(
+            EC.url_contains("/login")
+        )
+        self.assertIn("Account created successfully", driver.page_source)
     def test_01_login_shows_dashboard(self):
         self.assertIn("Dashboard", self.driver.page_source)
 
