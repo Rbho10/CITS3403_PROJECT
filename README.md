@@ -6,14 +6,14 @@
 
 #### Description
 
-**Productivity Tracker** is a web application designed to help students and professionals optimize their learning and productivity by tracking their study/work hours and task goals. Users can input data manually, and the system provides insightful analysis on focus trends, peak productivity times, and areas for improvement.
+**Productivity Tracker** is a web application designed to help students and professionals optimize their learning and productivity by tracking their study/work hours and task goals. Users can input data manually, and the system provides insightful analysis on focus trends, peak productivity times, and areas for improvement. To quickly familiarize yourself with the app’s interface and functionality, launch ProTrack and click the **Learn** button in the top-left corner. The ProTrack Manual will then appear, detailing the purpose and use of each feature.
 
 The dashboard highlights:
 - Daily/weekly/monthly study durations
 - Subject-wise efficiency
 - Personalized productivity trends
 
-This application motivates users by giving them clear visual feedback and enables sharing progress with peers or mentors.
+This application motivates users by giving them clear visual feedback using OpenAI API integration tool and enables sharing progress with peers or mentors. Simply click **My Friends** to add and view friends, or use My Subjects to create new subjects and log productivity sessions for each one. Once done, either view your updated dashboard insights or add another session if there's more you want to track. To share your insights with other ProTrack members, click the arrow icon in the top-right corner of any visualization container.
 
 
 | UWA ID     | Name          | GitHub Username   |
