@@ -27,7 +27,7 @@ A user.db database has been created to store user's credentials in a secure mann
 
 The code will be stored in a zip folder. Unzipping the folder will decompress the contents of the folder. 
 
-Steps to reproduce/run the code:
+**Steps to reproduce/run the code:**
 1. Create and activate a virtual environment by running the command: `python3 -m venv protrackenv` 
 Then access the virtual environment On Mac: `source protrackenv/bin/activate` On Windows: `protrackenv\Scripts\activate`
 2. Install the dependencies by running the command: `pip install -r requirements.txt`.
@@ -38,6 +38,8 @@ Make sure `python-dotenv` is installed in your virtual environment. This will au
 7. Create an empty `.env` file in the project's root directory. 
 8. In the `.env` file, paste the line `OPENAI_API_KEY=sk-...{your api key}`. Also,create a `SECRET_KEY={your secret key}` for taking user input through flask-WTF forms. After these two variables have been inserted, save the file. The `python-dotenv` that has been installed in your virtual environment will automatically treat this as environment variables of the os and will then be used in the respective python codes (i.e. generate_insights.py, addSession.html).
 9. Run the application: `flask run`. This will only work if you set up the `FLASK_APP` environment variable to point to your flask application instance.
+
+Note: Sometimes running this the first or second time may result in an error. To fix this, simply close all terminal then create a new one and follow the instructions again from accessing the virtual environment and adding the respective environment variables (step 3). 
 
 **Testing 5 Unit Tests and 5 Selenium Tests.**
 1. Make sure that the flask environment is set to `export FLASK_ENV=testing` for this testing purpose.
