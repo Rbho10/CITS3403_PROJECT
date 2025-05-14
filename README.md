@@ -6,14 +6,14 @@
 
 #### Description
 
-**Productivity Tracker** is a web application designed to help students and professionals optimize their learning and productivity by tracking their study/work hours and task goals. Users can input data manually, and the system provides insightful analysis on focus trends, peak productivity times, and areas for improvement.
+**Productivity Tracker** is a web application designed to help students and professionals optimize their learning and productivity by tracking their study/work hours and task goals. Users can input data manually, and the system provides insightful analysis on focus trends, peak productivity times, and areas for improvement. To quickly familiarize yourself with the app’s interface and functionality, launch ProTrack and click the **Learn** button in the top-left corner. The ProTrack Manual will then appear, detailing the purpose and use of each feature.
 
 The dashboard highlights:
 - Daily/weekly/monthly study durations
 - Subject-wise efficiency
 - Personalized productivity trends
 
-This application motivates users by giving them clear visual feedback and enables sharing progress with peers or mentors.
+This application motivates users by giving them clear visual feedback using OpenAI API integration tool and enables sharing progress with peers or mentors. Simply click **My Friends** to add and view friends, or use **My Subjects** to create new subjects and log productivity sessions for each one. Once done, either view your updated dashboard insights or add another session if there's more you want to track. To share your insights with other ProTrack members, click the arrow icon in the top-right corner of any visualisation container.
 
 
 | UWA ID     | Name          | GitHub Username   |
@@ -31,7 +31,7 @@ Steps to reproduce/run the code:
 1. Create and activate a virtual environment by running the command: `python3 -m venv protrackenv` 
 Then access the virtual environment On Mac: `source protrackenv/bin/activate` On Windows: `protrackenv\Scripts\activate`
 2. Install the dependencies by running the command: `pip install -r requirements.txt`.
-3. Set up the flask environment by `export FLASK_APP=run:app` and `export FLASK_ENV=development` for development or `export FLASK_ENV=testing` for testing to run the flask app instance later.
+3. Set up the flask environment by `export FLASK_APP=run:app` then `export FLASK_ENV=development` for development/production (testing with the real user.db database) or `export FLASK_ENV=testing` for testing to run the flask app instance later. In this case, we must use `export FLASK_ENV=development`.
 Make sure `python-dotenv` is installed in your virtual environment. This will automatically load the .env file which contains your OpenAI API Key and secret key. This has been safely ignored through .gitignore file so that the key won't be exposed to the public repository.
 5. Create an OpenAI Account via https://platform.openai.com/
 6. Follow prompts and create an API key by entering API Key Name, and enter a project name. Copy the API Key once generated.
@@ -40,8 +40,8 @@ Make sure `python-dotenv` is installed in your virtual environment. This will au
 9. Run the application: `flask run`. This will only work if you set up the `FLASK_APP` environment variable to point to your flask application instance.
 
 **Testing 5 Unit Tests and 5 Selenium Tests.**
-Make sure that the flask environment is set to `export FLASK_ENV=testing` for this testing purpose.
-For unit tests, run the command `python3 -m unittest tests/unitTests.py`
-For Selenium tests, run the command `python -m unittest tests.selenium_tests.SeleniumTests`
+1. Make sure that the flask environment is set to `export FLASK_ENV=testing` for this testing purpose.
+2. For unit tests, run the command `python3 -m unittest tests/unitTests.py`
+3. For Selenium tests, run the command `python3 -m unittest tests.selenium_tests.SeleniumTests`
 
 
