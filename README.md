@@ -28,10 +28,11 @@ A user.db database has been created to store user's credentials in a secure mann
 The code will be stored in a zip folder. Unzipping the folder will decompress the contents of the folder. 
 
 **Steps to reproduce/run the code:**
-1. Create and activate a virtual environment by running the command: `python3 -m venv protrackenv` 
-Then access the virtual environment On Mac: `source protrackenv/bin/activate` On Windows: `protrackenv\Scripts\activate`
-2. Install the dependencies by running the command: `pip install -r requirements.txt`.
-3. Set up the flask environment by `export FLASK_APP=run:app` then `export FLASK_ENV=development` for development/production (testing with the real user.db database) or `export FLASK_ENV=testing` for testing to run the flask app instance later. In this case, we must use `export FLASK_ENV=development`.
+1. Clone the repository. `git clone https://github.com/Rbho10/CITS3403_PROJECT.git`
+2. Create and activate a virtual environment by running the command: `python3 -m venv protrackenv` 
+Then access the virtual environment On Mac: `source protrackenv/bin/activate` On Windows: `python -m venv protrackenv` then `protrackenv\Scripts\activate`
+3. Install the dependencies by running the command: `pip install -r requirements.txt`.
+4. Start the server. On Mac: `python3 run.py`. On Windows: `python run.py`. Alternatively, we can set up the flask environment by `export FLASK_APP=run:app` then `export FLASK_ENV=development` for development/production (testing with the real user.db database) or `export FLASK_ENV=testing` for testing to run the flask app instance later. In this case, we must use `export FLASK_ENV=development`.
 Make sure `python-dotenv` is installed in your virtual environment. This will automatically load the .env file which contains your OpenAI API Key and secret key. This has been safely ignored through .gitignore file so that the key won't be exposed to the public repository.
 5. Create an OpenAI Account via https://platform.openai.com/
 6. Follow prompts and create an API key by entering API Key Name, and enter a project name. Copy the API Key once generated.
