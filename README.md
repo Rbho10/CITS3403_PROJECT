@@ -35,7 +35,7 @@ Then access the virtual environment On Mac: `source protrackenv/bin/activate` On
 Make sure `python-dotenv` is installed in your virtual environment. This will automatically load the .env file which contains your OpenAI API Key and secret key. This has been safely ignored through .gitignore file so that the key won't be exposed to the public repository.
 5. Create an OpenAI Account via https://platform.openai.com/
 6. Follow prompts and create an API key by entering API Key Name, and enter a project name. Copy the API Key once generated.
-7. Create an empty `.env` file in the project's root directory. 
+7. Create an empty `.env` file in the project's root directory. Otherwise, use the sample .env file that has been provided for submission.
 8. In the `.env` file, paste the line `OPENAI_API_KEY=sk-...{your api key}`. Also,create a `SECRET_KEY={your secret key}` for taking user input through flask-WTF forms. After these two variables have been inserted, save the file. The `python-dotenv` that has been installed in your virtual environment will automatically treat this as environment variables of the os and will then be used in the respective python codes (i.e. generate_insights.py, addSession.html).
 9. Run the application: `flask run`. This will only work if you set up the `FLASK_APP` environment variable to point to your flask application instance.
 
